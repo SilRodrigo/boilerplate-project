@@ -1,6 +1,7 @@
 import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
+import http from 'http';
 
 import { routes } from './core/routes';
 import { scopePerRequest } from 'awilix-express';
@@ -14,4 +15,6 @@ server.use(express.urlencoded({ extended: true }));
 server.use(morgan('dev'))
 server.use(routes)
 
-export { server }
+const httpServer = http.createServer(server);
+
+export { httpServer }

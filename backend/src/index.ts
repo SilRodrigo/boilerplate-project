@@ -1,23 +1,25 @@
-import { config } from 'dotenv'
+import { config } from "dotenv";
 
-import { server } from './server'
-import { PORT_APP } from './core/config';
-import { prismaClient } from './libs/PrismaClient';
-import _container from './container';
+import { httpServer } from "./server";
+import { PORT_APP } from "./core/config";
+import { prismaClient } from "./libs/PrismaClient";
+import { GameGateway } from "./websocket/GameGateway";
+import "./container";
 
 config();
 
-server.listen(PORT_APP || 3333, () => {
+new GameGateway(httpServer);
+
+httpServer.listen(PORT_APP || 3333, () => {
   console.clear();
   prismaClient.$connect()
     .then(() => {
-      console.log(`Server running on port ${PORT_APP}.`)
-      console.log(`Database connected.`)
+      console.log(`Server running on port ${PORT_APP}`);
+      console.log(`Database connected`);
     })
     .catch((err: unknown) => {
-      console.error(err)
-      prismaClient.$disconnect()
-      process.exit(1)
-    })
-
+      console.error(err);
+      prismaClient.$disconnect();
+      process.exit(1);
+    });
 });

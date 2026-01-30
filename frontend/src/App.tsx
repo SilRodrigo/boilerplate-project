@@ -1,44 +1,47 @@
 import './App.css'
-import Login from './pages/auth/Login'
-import Logout from './pages/auth/Logout'
-import { useAuth } from './contexts/AuthContext'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import ContentWrapper from './components/content-wrapper'
 import { AuthProvider } from './contexts/AuthContext'
-import HomePage from './pages/home/Index'
+import MockGame from './pages/eldritch/mockGame/Index'
+import { CharacterSelectPage } from './pages/eldritch/characterSelect/Index'
+import { applyTheme } from './theme/applyTheme'
+import { eldritchTheme } from './theme/eldritch'
+import { useEffect } from 'react'
+import { IsSelected } from './components/eldritch/IsSelected'
+import Admin from './pages/eldritch/admin/Index'
 
-function PrivateRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isLoading } = useAuth();
 
-  if (isLoading) {
-    
-    return <ContentWrapper>
-      <div>Carregando...</div>
-    </ContentWrapper>;
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return <>{children}</>;
-}
+{/* <GameProvider>
+  <CharacterSelectPage onConfirm={() =>} />
+</GameProvider> */}
 
 function App() {
+
+  useEffect(() => {
+    applyTheme(eldritchTheme);
+  }, []);
+
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/logout" element={<Logout />} />
           <Route
             path="/"
             element={
-              <PrivateRoute>
-                <ContentWrapper>
-                  <HomePage />
-                </ContentWrapper>
-              </PrivateRoute>
+              <CharacterSelectPage />
+            }
+          />
+          <Route
+            path="/mock-game"
+            element={
+              <IsSelected>
+                <MockGame />
+              </IsSelected>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+                <Admin />
             }
           />
         </Routes>

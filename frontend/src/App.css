@@ -3,6 +3,9 @@
 
 body {
   @apply bg-gray-100;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-main);
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -47,6 +50,15 @@ body {
 }
 
 :root {
+  --font-main: 'Inter', system-ui, sans-serif;
+  --font-title: 'Cinzel', serif;
+
+  --bg: #ffffff;
+  --card: #f4f4f5;
+  --border: #e4e4e7;
+  --primary: #18181b;
+  --text: #09090b;
+  --muted-text: #71717a;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -115,11 +127,46 @@ body {
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+.font-title {
+  font-family: var(--font-title);
+}
+
+.sheet-background {
+  background-image: url('/sheet/eldritch/background.png');
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-4px);
+  }
+
+  50% {
+    transform: translateX(4px);
+  }
+
+  75% {
+    transform: translateX(-4px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.shake {
+  animation: shake .5s;
 }
