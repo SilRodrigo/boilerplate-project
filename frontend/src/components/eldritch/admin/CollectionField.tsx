@@ -9,19 +9,18 @@ import {
     SelectValue
 } from "@/components/ui/select"
 import { Catalog } from "@/data/catalog"
-import type { IItem } from "@/data/items"
-import { getAllItems, getItemById } from "@/utils/getItems"
+import { getAllItems } from "@/utils/getItems"
 import { useState } from "react"
 
 type Props = {
-    playerId: string
+    token: string
     field: any
-    addItem: (playerId: string, item: IItem) => void
-    removeItem: (playerId: string, itemId: string) => void
+    addItem: (token: string, itemId: string) => void
+    removeItem: (token: string, itemId: string) => void
 }
 
 export function AdminCollectionField({
-    playerId,
+    token,
     field,
     addItem,
     removeItem
@@ -47,21 +46,19 @@ export function AdminCollectionField({
     }
 
     const onAdd = (itemId: string) => {
-        const item = getItemById(Catalog.eldritch, itemId);
-
-        addItem(playerId, item)
+        addItem(token, itemId)
     };
     const onRemove = (itemId: string) => {
-        removeItem(playerId, itemId)
+        removeItem(token, itemId)
     };
 
     return (
         <div className="space-y-3" >
             < div className="flex gap-3 flex-wrap" >
                 {
-                    field.value.map((item: any) => (
+                    field.value.map((item: any, index: number) => (
                         <div
-                            key={item.id}
+                            key={item.id + index}
                             className="relative border rounded-md p-2"
                         >
                             <img

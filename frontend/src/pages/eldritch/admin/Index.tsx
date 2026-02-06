@@ -2,44 +2,37 @@ import { useEffect, useState } from "react"
 import { useGameSocket } from "@/hooks/useGameSocket"
 import { applyTheme } from "@/theme/applyTheme"
 import { eldritchTheme } from "@/theme/eldritch"
-
 import {
     Table,
     TableBody,
-    TableCell,
     TableHead,
     TableHeader,
     TableRow
 } from "@/components/ui/table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { AdminCollectionField } from "@/components/eldritch/admin/CollectionField"
+import { AdminField } from "@/components/eldritch/admin/Field"
+import { joinAdminGame } from "@/api/game"
 
 export default function Admin() {
-    const { state, join, updateField, removeItem, addItem } = useGameSocket()
+    const { state, join, kickPlayer, updateField, removeItem, addItem } = useGameSocket()
     const [draft, setDraft] = useState<Record<string, number>>({})
 
     useEffect(() => {
         applyTheme(eldritchTheme)
 
-        join({
-            character: {
-                id: '',
-                name: '',
-                image: '',
-                quote: '',
-                bio: '',
-                fields: []
-            },
-            name: '',
-            token: crypto.randomUUID(),
-            role: 'admin'
-        })
+        const joinGame = async () => {
+            const { data } = await joinAdminGame('eldritch');
+
+            const token = data.token;
+
+            join(token);
+        }
+
+        joinGame()
     }, [])
 
     useEffect(() => {
-        console.log(state)
         if (!state) return
 
         const next: Record<string, number> = {}
@@ -53,15 +46,34 @@ export default function Admin() {
 
     if (!state) return <div>Carregando admin…</div>
 
+    const excludedFields = [
+        'name', 'job', 'quote', 'bio', 'action', 'passive', 'initialSpace',
+    ];
+
     return (
         <div className="p-6 space-y-6">
             <h1 className="font-title text-xl font-bold">Admin</h1>
 
-            <div className="grid grid-cols-3 gap-3">
-                {state.players.map((player: any) => (
-                    <Card key={player.token}>
+            <div className="grid xl:grid-cols-3 grid-cols-1 gap-3">
+                {state.players.map((player: any) => {
+                    const characterName = player.character.fields.find((field: any) => field.key === 'name')?.value
+
+                    return <Card key={player.token} >
                         <CardHeader>
-                            <CardTitle>{player.name} ({player.status})</CardTitle>
+                            <CardTitle className="flex justify-between">
+                                <div>
+                                    {player.name} - <span className="italic text-[var(--muted-text)]">{characterName}</span>
+                                </div>
+                                <div>
+                                    <Button
+                                        className="active:scale-95 hover:scale-102 cursor-pointer transition duration-200"
+                                        size="sm"
+                                        onClick={() => kickPlayer(player.token)}
+                                    >
+                                        Remover
+                                    </Button>
+                                </div>
+                            </CardTitle>
                         </CardHeader>
 
                         <CardContent>
@@ -75,67 +87,29 @@ export default function Admin() {
                                 </TableHeader>
 
                                 <TableBody>
-                                    {player.character.fields.map((field: any) => {
-                                        const k = `${player.token}:${field.key}`
-
-                                        if (field.type === "collection") {
-                                            return (
-                                                <TableRow key={field.key}>
-                                                    <TableCell>{field.label}</TableCell>
-
-                                                    <TableCell colSpan={2}>
-                                                        <AdminCollectionField
-                                                            addItem={addItem}
-                                                            removeItem={removeItem}
-                                                            playerId={player.token}
-                                                            field={field}
-                                                        />
-                                                    </TableCell>
-                                                </TableRow>
-                                            )
-                                        }
+                                    {player.character.fields.filter((field: any) => !excludedFields.includes(field.key)).map((field: any, i: number) => {
+                                        const k = `${player.token}:${field.key}:${i}`
 
                                         return (
-                                            <TableRow key={field.key}>
-                                                <TableCell>{field.key}</TableCell>
-
-                                                <TableCell className="w-32">
-                                                    <Input
-                                                        type="number"
-                                                        value={draft[k] ?? field.value}
-                                                        onChange={(e) =>
-                                                            setDraft((d) => ({
-                                                                ...d,
-                                                                [k]: Number(e.target.value)
-                                                            }))
-                                                        }
-                                                    />
-                                                </TableCell>
-
-                                                <TableCell className="w-16 ">
-                                                    <Button
-                                                        className="active:scale-95 hover:scale-102 cursor-pointer transition duration-200"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            updateField(
-                                                                player.token,
-                                                                field.key,
-                                                                (draft[k] ?? field.value) - field.value
-                                                            )
-                                                        }
-                                                    >
-                                                        Aplicar
-                                                    </Button>
-                                                </TableCell>
-                                            </TableRow>
+                                            <AdminField
+                                                key={k}
+                                                token={player.token}
+                                                field={field}
+                                                k={k}
+                                                draft={draft}
+                                                setDraft={setDraft}
+                                                updateField={updateField}
+                                                removeItem={removeItem}
+                                                addItem={addItem}
+                                            />
                                         )
                                     })}
                                 </TableBody>
                             </Table>
                         </CardContent>
                     </Card>
-                ))}
+                })}
             </div>
-        </div>
+        </div >
     )
 }

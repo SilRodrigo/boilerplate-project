@@ -67,6 +67,20 @@ container.loadModules(
     }
 );
 
+// Gateways
+container.loadModules(
+    [
+        'runtime/gateways/**/*.js',
+    ],
+    {
+        cwd: __dirname,
+        formatName: 'camelCase',
+        resolverOptions: {
+            lifetime: Lifetime.SINGLETON,
+        },
+    }
+);
+
 console.log('Modules loaded:', Object.keys(container.registrations));
 
 export default container;

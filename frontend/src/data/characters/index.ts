@@ -33,7 +33,3 @@ export interface ICharacter {
   initialSpace: string;
   fields: FieldType[];
 }
-
-export const characterCatalog: { [key in typeof Catalog[keyof typeof Catalog]]: ICharacter[] } = {
-  eldritch: eldritchCharacters,
-};

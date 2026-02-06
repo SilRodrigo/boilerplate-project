@@ -1,10 +1,23 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { type ICharacter, characterCatalog } from "@/data/characters";
+import { type ICharacter } from "@/data/characters";
 import { CharacterCard } from "@/components/eldritch/CharacterCard";
+import { getCharacter } from "@/api/characters";
+import { joinGame } from "@/api/game";
 
 export function CharacterSelectPage() {
     const navigate = useNavigate();
+    const [characters, setCharacters] = useState<ICharacter[] | null>(null);
+
+    useEffect(() => {
+        const updateCharacters = async () => {
+            const characters = await getCharacter('eldritch');
+
+            setCharacters(characters);
+        }
+
+        updateCharacters();
+    }, []);
 
     useEffect(() => {
         const stored = localStorage.getItem('playerData');
@@ -15,27 +28,33 @@ export function CharacterSelectPage() {
         }
     }, [navigate]);
 
-    const [selected, setSelected] = useState<ICharacter | null>(null);
+    const [selected, setSelected] = useState<string | null>(null);
     const [playerName, setPlayerName] = useState("");
-
-    const gameId = 'eldritch';
-    const characters = characterCatalog[gameId];
 
     const characterClassName = 'hover:scale-101 cursor-pointer transition duration-200'
 
-    const confirm = () => {
+    const confirm = async () => {
+        console.log(selected)
+
         if (!selected) return;
 
-        localStorage.setItem('playerData', JSON.stringify({
-            character: selected,
-            name: playerName,
-            token: crypto.randomUUID(),
-            role: 'player'
-        }));
+        try {
+            const { data } = await joinGame('eldritch', playerName, selected);
+            localStorage.setItem('playerData', JSON.stringify({ token: data.token }));
 
-        alert(`Personagem ${selected.name} selecionado com sucesso!`);
+            navigate('/mock-game');
+        } catch (error) {
+            console.error(error);
+        }
 
-        navigate('/mock-game');
+    }
+
+    if (!characters) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <p>Carregando personagens...</p>
+            </div>
+        );
     }
 
     return (
@@ -44,10 +63,9 @@ export function CharacterSelectPage() {
 
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                 {characters.map(character => (
-                    <div key={character.id} className={selected?.id === character.id ? `${characterClassName} border-4 border-[var(--primary)] rounded-xl` : characterClassName}
-                        onClick={() => setSelected(character)}>
+                    <div key={character.id} className={selected === character.id ? `${characterClassName} border-4 border-[var(--primary)] rounded-xl` : characterClassName}
+                        onClick={() => setSelected(character.id)}>
                         <CharacterCard
-                            gameId={gameId}
                             character={character}
                         />
                     </div>

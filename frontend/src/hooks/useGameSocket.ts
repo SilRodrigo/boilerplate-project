@@ -6,28 +6,28 @@ type ScalarType = "number" | "string" | "boolean";
 type CollectionType = "collection";
 
 interface ScalarField {
-    key: string;
-    label: string;
-    type: ScalarType;
-    value: number | string | boolean;
+  key: string;
+  label: string;
+  type: ScalarType;
+  value: number | string | boolean;
 }
 
 interface CollectionField {
-    key: string;
-    label: string;
-    type: CollectionType;
-    value: IItem[];
+  key: string;
+  label: string;
+  type: CollectionType;
+  value: IItem[];
 }
 
 type FieldType = ScalarField | CollectionField;
 
 export interface ICharacter {
-    id: string;
-    name: string;
-    image: string;
-    quote: string;
-    bio: string;
-    fields: FieldType[];
+  id: string;
+  name: string;
+  image: string;
+  quote: string;
+  bio: string;
+  fields: FieldType[];
 }
 
 export interface IPlayer {
@@ -42,13 +42,14 @@ type GameState = {
   players: IPlayer[];
 };
 
-
-/*  remover daqui dps */
+export type PlayerData = {
+  token: string;
+}
 
 export function useGameSocket() {
   const socketRef = useRef<WebSocket | null>(null);
   const isOpenRef = useRef(false);
-  const pendingJoinRef = useRef<any>(null);
+  const pendingJoinRef = useRef<PlayerData | null>(null);
 
   const [state, setState] = useState<GameState | null>(null);
 
@@ -91,22 +92,22 @@ export function useGameSocket() {
     };
   }, []);
 
-  const join = (playerData: IPlayer) => {
+  const join = (token: string) => {
     if (!isOpenRef.current) {
-      pendingJoinRef.current = playerData;
+      pendingJoinRef.current = { token };
       return;
     }
 
     socketRef.current?.send(
       JSON.stringify({
         type: "join",
-        payload: playerData,
+        payload: { token },
       })
     );
   };
 
   const updateField = (
-    playerId: string,
+    token: string,
     fieldKey: string,
     delta: number
   ) => {
@@ -115,13 +116,13 @@ export function useGameSocket() {
     socketRef.current?.send(
       JSON.stringify({
         type: "update_field",
-        payload: { playerId, fieldKey, delta },
+        payload: { token, fieldKey, delta },
       })
     );
   };
 
   const removeItem = (
-    playerId: string,
+    token: string,
     itemId: string,
   ) => {
     if (!isOpenRef.current) return;
@@ -129,24 +130,35 @@ export function useGameSocket() {
     socketRef.current?.send(
       JSON.stringify({
         type: "remove_item",
-        payload: { playerId, itemId },
+        payload: { token, itemId },
       })
     );
   };
 
   const addItem = (
-    playerId: string,
-    item: IItem,
+    token: string,
+    itemId: string,
   ) => {
     if (!isOpenRef.current) return;
 
     socketRef.current?.send(
       JSON.stringify({
         type: "add_item",
-        payload: { playerId, item },
+        payload: { token, itemId },
       })
     );
   };
 
-  return { state, join, updateField, removeItem, addItem };
+  const kickPlayer = (token: string) => {
+    if (!isOpenRef.current) return;
+
+    socketRef.current?.send(
+      JSON.stringify({
+        type: "kick",
+        payload: { token },
+      })
+    );
+  };
+
+  return { state, join, updateField, removeItem, addItem, kickPlayer };
 }

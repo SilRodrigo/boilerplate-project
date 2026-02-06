@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import { IExample, exampleFactory } from "../../../entities/example";
 import { ICreateExampleDto, IRequestExampleDto, IUpdateExampleDto } from "../../../dtos";
 import { PrismaBaseRepository } from "./abstract/BaseRepository";

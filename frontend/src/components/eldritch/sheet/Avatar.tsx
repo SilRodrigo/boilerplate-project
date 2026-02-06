@@ -1,26 +1,25 @@
-import type { GameId } from "@/data/catalog";
-import { getCharacter } from "@/utils/getCharacters";
+import { cn } from "@/lib/utils";
 
 type Props = {
-  gameId: GameId;
-  characterId?: string;
+  characterId: string;
+  imagePath: string
+  containerClassName?: string
 };
 
-export default function Avatar({ gameId, characterId }: Props) {
-  const character = getCharacter(gameId, characterId);
-
+export default function Avatar({
+  characterId,
+  imagePath,
+  containerClassName,
+}: Props) {
   return (
-    <div className="
-      place-self-center md:place-self-start
-      w-40
-      rounded-lg
-      bg-black/30
-      border border-[var(--border)]
-    ">
-      {character ? (
+    <div className={cn(
+      'place-self-center md:place-self-start w-40 rounded-lg bg-black/30 border border-[var(--border)]',
+      containerClassName
+    )}>
+      {characterId ? (
         <img
-          src={character.image}
-          alt={character.name}
+          src={imagePath}
+          alt={characterId}
           className="w-full h-full object-cover"
         />
       ) : (

@@ -8,7 +8,6 @@ proxyRoutes.use(
     createProxyMiddleware({
         target: 'http://localhost:5173',
         changeOrigin: true,
-        /* ws: true */
     })
 );
 

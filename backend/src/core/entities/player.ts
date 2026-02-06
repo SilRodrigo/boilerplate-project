@@ -4,5 +4,4 @@ export interface IPlayer {
   token: string;
   name: string;
   character: ICharacter;
-  status?: "online" | "sleeping"
 }

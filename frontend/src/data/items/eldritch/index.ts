@@ -374,14 +374,6 @@ export const items: IItem[] = [
         description: '',
     },
     {
-        id: "agency_quarantine",
-        name: "Agency Quarantine",
-        image: "/items/eldritch/Agency_Quarantine.webp",
-        modifiers: {},
-        trait: 'Item',
-        description: '',
-    },
-    {
         id: "cultes_des_goules",
         name: "Cultes des Goules",
         image: "/items/eldritch/Cultes_des_Goules.webp",

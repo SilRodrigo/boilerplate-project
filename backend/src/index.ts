@@ -3,8 +3,8 @@ import { config } from "dotenv";
 import { httpServer } from "./server";
 import { PORT_APP } from "./core/config";
 import { prismaClient } from "./libs/PrismaClient";
-import { GameGateway } from "./websocket/GameGateway";
 import "./container";
+import { GameGateway } from "./runtime/gateways/gameGateway";
 
 config();
 

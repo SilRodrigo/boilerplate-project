@@ -35,7 +35,7 @@ const buttonVariants = cva(
 )
 
 function Button({
-  className,
+  className = "active:scale-95 hover:scale-102 cursor-pointer transition duration-200",
   variant,
   size,
   asChild = false,

@@ -1,4 +1,3 @@
-import { items } from "@/data/items/eldritch";
 import type { ICharacter, FieldType } from "..";
 import { getItemById } from "@/utils/getItems";
 
