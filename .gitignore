@@ -2,6 +2,7 @@
 
 # Node
 node_modules/
+.dev-logs/
 
 # Backend
 backend/node_modules/

@@ -1,121 +1,57 @@
+# Monitor de FIIs
 
-  
+MVP para acompanhar fundos imobiliarios com foco inicial em cotacao e grafico near real-time.
 
-#  📘 Programação para Internet – Univates
+Por enquanto o ativo acompanhado esta hardcoded como `ARRI11`. A tela consulta o backend, que usa `yahoo-finance2` para buscar dados do Yahoo Finance com o simbolo `ARRI11.SA`.
 
-  
+## Stack
 
-Este projeto contém um **monorepo** com:
+- Backend: Node.js, Express, TypeScript, Awilix
+- Frontend: React, Vite, TypeScript, Tailwind CSS
+- Dados de mercado: `yahoo-finance2`
 
-  
+## Requisitos
 
--  **Backend**: Node.js + Express + Prisma
+- Node.js 20 ou superior
+- npm
 
--  **Frontend**: React + Vite + Tailwind + Shadcn
-
-  
-
----
-
-  
-
-##  ✅ Requisitos
-
-  
-
-Antes de rodar o projeto, é necessário ter instalado:
-
-  
-
--  **[Node.js LTS (>=18.x)](https://nodejs.org/)**
-
--  **[PostgreSQL](https://www.postgresql.org/)**
-
-  
-
-Verifique as instalações com:
-
-  
+## Instalar
 
 ```bash
-
-node -v
-
-npm -v
-
-psql --version
-
-```
-
-  
-
----
-
-  
-
-##  🚀 Como rodar do zero
-
-  
-
-###  1️⃣ Extrair o projeto
-
-Baixe o arquivo `.zip`, extraia para uma pasta e abra no terminal:
-
-  
-
-```bash
-
-cd projeto-integrador
-
-```
-
-  
-
-###  2️⃣ Instalar dependências
-
-Na raiz do projeto:
-
-  
-
-```bash
-
 npm install
-
 ```
 
-> Esse comando instala as dependências do **backend** e do **frontend** de uma vez.
-
-  
-
-Crie as tabelas no banco de dados:
-
-  
-
-```bash
-
-npm run  prisma:db-push  --workspace  backend
-
-```
-Para criar o primeiro usuario, acesse o banco diretamente
-
-  
-
-###  3️⃣ Rodar o projeto
+## Rodar o MVP de mercado
 
 Na raiz do projeto:
 
-  
-
 ```bash
-
-npm run  dev
-
+npm run market:dev
 ```
 
-  
+URLs:
 
-###  🌐 URLs
+- Frontend: http://localhost:5173
+- Backend: http://localhost:4000
 
--  **Frontend**: [http://localhost:5173](http://localhost:5173)
+Rotas principais:
 
--  **Backend**: [http://localhost:4000](http://localhost:4000)
+```text
+GET /api/v1/market/quote/ARRI11
+GET /api/v1/market/chart/ARRI11?interval=5m
+```
+
+## Validar a integracao Yahoo
+
+```bash
+npm run spike:yahoo --workspace backend
+```
+
+Esse comando consulta `ARRI11.SA`, imprime a cotacao atual e alguns pontos do grafico.
+
+## Observacoes
+
+- O Yahoo Finance nao oferece uma API oficial publica com SLA. O pacote `yahoo-finance2` usa endpoints nao oficiais.
+- As chamadas devem continuar passando pelo backend, nunca diretamente pelo frontend.
+- Para reduzir risco de bloqueio/limite, a proxima etapa deve adicionar cache de curta duracao para quote e chart.
+- A parte de eventos, comunicados e documentos dos FIIs deve ser integrada separadamente, preferencialmente via CVM Dados Abertos.

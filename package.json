@@ -7,6 +7,7 @@
   ],
   "scripts": {
     "dev": "npx concurrently \"npm run server:dev --workspace backend\" \"npm run dev --workspace frontend\"",
+    "market:dev": "npx concurrently \"npm run market:dev --workspace backend\" \"npm run dev --workspace frontend\"",
     "build": "npm run build --workspace backend && npm run build --workspace frontend",
     "install:all": "npm install"
   },
