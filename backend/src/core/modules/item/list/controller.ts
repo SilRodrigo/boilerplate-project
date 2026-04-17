@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { errorResponse, successResponse } from '../../../../helpers/response';
 import { IController } from '../../../../types/Controller';
 import { ICharacterListUseCase } from './useCase';
-import { GameId } from '../../../fixtures';
+import { GameId } from '../../../../fixtures';
 
 interface IFactoryParams { 
     characterListUseCase: ICharacterListUseCase;

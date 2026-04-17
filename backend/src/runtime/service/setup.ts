@@ -1,11 +1,12 @@
-import { IPlayer } from "../../core/entities/player";
-import { CATALOG, GameId } from "../../core/fixtures";
+import { CATALOG, GameId } from "../../fixtures";
+import { ELDRITCH_ID } from "../../fixtures/eldritch";
+import { MANSIONS_OF_MADNESS_ID } from "../../fixtures/mansions-of-madness";
 import { gameManager } from "../state/gameManager";
 
 
 
 function startGameStates() {
-    const initialGameIds: GameId[] = ['eldritch'];
+    const initialGameIds: GameId[] = [ELDRITCH_ID, MANSIONS_OF_MADNESS_ID];
 
     initialGameIds.forEach((gameId) => {
         gameManager.set(gameId, {

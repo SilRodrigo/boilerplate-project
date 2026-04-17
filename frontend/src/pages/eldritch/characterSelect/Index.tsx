@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { type ICharacter } from "@/data/characters";
-import { CharacterCard } from "@/components/eldritch/CharacterCard";
+import { EldritchCharacterCard } from "@/components/eldritch/EldritchCharacterCard";
 import { getCharacter } from "@/api/characters";
 import { joinGame } from "@/api/game";
+import { applyTheme } from "@/theme/applyTheme";
+import { eldritchTheme } from "@/theme/eldritch";
 
-export function CharacterSelectPage() {
+export function EldritchCharacterSelectPage() {
     const navigate = useNavigate();
     const [characters, setCharacters] = useState<ICharacter[] | null>(null);
 
     useEffect(() => {
+        applyTheme(eldritchTheme);
+
         const updateCharacters = async () => {
             const characters = await getCharacter('eldritch');
 
@@ -24,7 +28,7 @@ export function CharacterSelectPage() {
 
         if (stored) {
             console.log('Player data found, redirecting to game...');
-            navigate('/mock-game', { replace: true });
+            navigate('/eldritch/game', { replace: true });
         }
     }, [navigate]);
 
@@ -42,7 +46,7 @@ export function CharacterSelectPage() {
             const { data } = await joinGame('eldritch', playerName, selected);
             localStorage.setItem('playerData', JSON.stringify({ token: data.token }));
 
-            navigate('/mock-game');
+            navigate('/game', { replace: true });
         } catch (error) {
             console.error(error);
         }
@@ -65,7 +69,7 @@ export function CharacterSelectPage() {
                 {characters.map(character => (
                     <div key={character.id} className={selected === character.id ? `${characterClassName} border-4 border-[var(--primary)] rounded-xl` : characterClassName}
                         onClick={() => setSelected(character.id)}>
-                        <CharacterCard
+                        <EldritchCharacterCard
                             character={character}
                         />
                     </div>

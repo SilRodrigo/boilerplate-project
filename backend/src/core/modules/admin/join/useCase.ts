@@ -1,7 +1,7 @@
 import { tokenService } from "../../../../runtime/service/token";
 import { gameManager } from "../../../../runtime/state/gameManager";
 import { IUseCase, withUseCaseResponse } from "../../../../types/UseCase";
-import { GameId } from "../../../fixtures";
+import { GameId } from "../../../../fixtures";
 import InMemoryCharacterRepository from "../../../repositories/implementations/inMemory/CharacterRepository";
 
 interface IFactoryParams {

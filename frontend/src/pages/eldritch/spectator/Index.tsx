@@ -6,7 +6,7 @@ import { eldritchTheme } from "@/theme/eldritch";
 import { useEffect } from "react";
 
 
-export default function Spectator() {
+export default function EldritchSpectator() {
     const { state, join } = useGameSocket()
 
     useEffect(() => {

@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { errorResponse, successResponse } from '../../../../helpers/response';
 import { IController } from '../../../../types/Controller';
 import { IItemFindByIdUseCase } from './useCase';
-import { GameId } from '../../../fixtures';
+import { GameId } from '../../../../fixtures';
 import { IItem } from '../../../entities/item';
 
 interface IFactoryParams {

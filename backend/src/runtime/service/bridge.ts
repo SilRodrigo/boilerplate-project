@@ -1,6 +1,6 @@
 import { HOST_APP, PORT_APP } from "../../core/config";
 import { IItem } from "../../core/entities/item";
-import { GameId } from "../../core/fixtures";
+import { GameId } from "../../fixtures";
 import { PREFIX_ROUTE } from "../../core/url";
 import { ApiResponse } from "../../types/ApiResponse";
 

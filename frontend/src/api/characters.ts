@@ -11,5 +11,5 @@ export async function getCharacter(
     const { request } = api();
     const { data } = await request(`/character/${gameId}/${characterId || ''}`);
 
-    return data;
+    return data as ICharacter[];
 }

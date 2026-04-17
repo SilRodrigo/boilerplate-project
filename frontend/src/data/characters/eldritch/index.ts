@@ -1,6 +1,17 @@
 import type { ICharacter, FieldType } from "..";
 import { getItemById } from "@/utils/getItems";
 
+export interface IEldritchCharacter extends ICharacter {
+  name: string;
+  image: string;
+  quote: string;
+  bio: string;
+  job: string;
+  action: string;
+  passive: string;
+  initialSpace: string;
+}
+
 function createSkills(
   health: number,
   sanity: number,
@@ -30,7 +41,7 @@ function createCollectionField(...ids: string[]): FieldType {
   }
 }
 
-export const characters: ICharacter[] = [
+export const characters: IEldritchCharacter[] = [
   {
     id: "norman_withers",
     name: "Norman Withers",

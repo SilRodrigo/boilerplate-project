@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { errorResponse, successResponse } from '../../../../helpers/response';
 import { IController } from '../../../../types/Controller';
-import { GameId } from '../../../fixtures';
+import { GameId } from '../../../../fixtures';
 import { IPlayerJoinUseCase } from './useCase';
 
 interface IFactoryParams {

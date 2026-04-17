@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button"
 import { AdminField } from "@/components/eldritch/admin/Field"
 import { joinAdminGame } from "@/api/game"
 
-export default function Admin() {
+export default function EldritchAdmin() {
     const { state, join, kickPlayer, updateField, removeItem, addItem } = useGameSocket()
     const [draft, setDraft] = useState<Record<string, number>>({})
 

@@ -4,7 +4,8 @@ import { gameManager } from "../state/gameManager";
 import { tokenService } from "../service/token";
 import { setupService } from "../service/setup";
 import { bridgeService } from "../service/bridge";
-import { GameId } from "../../core/fixtures";
+import { GameId } from "../../fixtures";
+import { IItem } from "../../core/entities/item";
 
 type UpdateMessage = {
   type: "update";
@@ -51,7 +52,17 @@ type KickMessage = {
   };
 };
 
-type ClientMessage = JoinMessage | UpdateFieldMessage | AddItemMessage | RemoveItemMessage | KickMessage | UpdateMessage;
+/* Temp */
+
+type AddCustomItemMessage = {
+  type: "custom_item";
+  payload: {
+    token: string;
+    item: IItem;
+  };
+}
+
+type ClientMessage = JoinMessage | UpdateFieldMessage | AddItemMessage | RemoveItemMessage | KickMessage | UpdateMessage | AddCustomItemMessage;
 
 type GameWebSocket = WebSocket & {
   gameId?: string;
@@ -158,7 +169,7 @@ export class GameGateway {
     const { gameId } = this.processMessagePayload(token, ws.token);
     if (!gameId) return;
 
-    const player = gameManager.get(gameId)?.players.find((p) => p.token === token);
+    const player = gameManager.findPlayerByToken(gameId, token);
     const field = player?.character.fields.find((f) => f.key === fieldKey);
 
     if (field && typeof field.value === "number") {
@@ -175,8 +186,7 @@ export class GameGateway {
     const item = await bridgeService.findItemById({ gameId: gameId as GameId, id: itemId });
     if (!item) return;
 
-    const player = gameManager.get(gameId)?.players.find(p => p.token === token)
-    const field = player?.character.fields.find(f => f.key === "items")
+    const field = gameManager.findCharacterFieldByPlayerToken(gameId, token, "items");
 
     if (field?.type === "collection") {
       field.value.push(item)
@@ -189,9 +199,8 @@ export class GameGateway {
     const { gameId } = this.processMessagePayload(token, ws.token);
     if (!gameId) return;
 
-    const player = gameManager.get(gameId)?.players.find(p => p.token === token)
-    const field = player?.character.fields.find(f => f.key === "items")
-    if (!field || field.type !== "collection") return;
+    const field = gameManager.findCharacterFieldByPlayerToken(gameId, token, "items");
+    if (field?.type !== "collection") return;
 
     const index = field.value.findIndex((i: any) => i.id === itemId)
     if (index === -1) return;

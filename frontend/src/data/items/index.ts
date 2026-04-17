@@ -1,4 +1,4 @@
-import type { Catalog } from "../catalog";
+import type { CATALOG } from "../catalog";
 import { items as eldritchItems } from "./eldritch";
 
 export interface IItem {
@@ -11,6 +11,6 @@ export interface IItem {
   quantity?: number;
 }
 
-export const itemCatalog: { [key in typeof Catalog[keyof typeof Catalog]]: IItem[] } = {
+export const itemCatalog: { [key in typeof CATALOG[keyof typeof CATALOG]]: IItem[] } = {
   eldritch: eldritchItems,
 };

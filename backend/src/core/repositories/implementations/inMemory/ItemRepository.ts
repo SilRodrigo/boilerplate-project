@@ -1,4 +1,4 @@
-import { CATALOG, GameId } from "../../../fixtures";
+import { CATALOG, GameId } from "../../../../fixtures";
 
 export default class InMemoryItemRepository {
     findById({ id, gameId }: { id: string, gameId: GameId }) {

@@ -1,8 +1,8 @@
 import { Response } from 'express';
 import { errorResponse, successResponse } from '../../../../helpers/response';
 import { IController } from '../../../../types/Controller';
-import { GameId } from '../../../fixtures';
 import { IAdminJoinUseCase } from './useCase';
+import { GameId } from '../../../../fixtures';
 
 interface IFactoryParams {
     adminJoinUseCase: IAdminJoinUseCase;

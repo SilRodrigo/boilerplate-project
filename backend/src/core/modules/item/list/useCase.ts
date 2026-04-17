@@ -1,6 +1,6 @@
 import { IUseCase, withUseCaseResponse } from "../../../../types/UseCase";
 import { ICharacter } from "../../../entities/character";
-import { CATALOG, GameId } from "../../../fixtures";
+import { CATALOG, GameId } from "../../../../fixtures";
 
 interface IFactoryParams { }
 

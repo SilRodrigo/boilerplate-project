@@ -1,15 +1,7 @@
-import { ICharacter } from "../../../entities/character";
-import { FieldType, ScalarType } from "../../../entities/field";
+import { createField } from "../..";
+import { ICharacter } from "../../../core/entities/character";
+import { FieldType } from "../../../core/entities/field";
 import { items } from "../items";
-
-function createField(key: string, label: string, type: ScalarType, value: number | string | boolean): FieldType {
-  return {
-    key,
-    label,
-    type,
-    value
-  }
-}
 
 function createSkills(
   health: number,

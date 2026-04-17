@@ -1,18 +1,15 @@
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Match from './pages/eldritch/match/Index'
-import { CharacterSelectPage } from './pages/eldritch/characterSelect/Index'
-import { applyTheme } from './theme/applyTheme'
-import { eldritchTheme } from './theme/eldritch'
-import { useEffect } from 'react'
-import { IsSelected } from './components/eldritch/IsSelected'
-import Admin from './pages/eldritch/admin/Index'
-import Spectator from './pages/eldritch/spectator/Index'
+import EldritchMatch from './pages/eldritch/match/Index'
+import { EldritchCharacterSelectPage } from './pages/eldritch/characterSelect/Index'
+import { IsSelected } from './components/IsSelected'
+import EldritchAdmin from './pages/eldritch/admin/Index'
+import EldritchSpectator from './pages/eldritch/spectator/Index'
+import HomePage from './pages/home/Index'
+import { MOMCharacterSelectPage } from './pages/mansions-of-madness/characterSelect/Index'
+import MOMMatch from './pages/mansions-of-madness/match/Index'
+import MOMAdmin from './pages/mansions-of-madness/admin/Index'
 function App() {
-
-  useEffect(() => {
-    applyTheme(eldritchTheme);
-  }, []);
 
   return (
     <BrowserRouter>
@@ -20,27 +17,53 @@ function App() {
         <Route
           path="/"
           element={
-            <CharacterSelectPage />
+            <MOMCharacterSelectPage />
           }
         />
         <Route
-          path="/mock-game"
+          path="eldritch/"
+          element={
+            <EldritchCharacterSelectPage />
+          }
+        />
+        <Route
+          path="eldritch/game"
           element={
             <IsSelected>
-              <Match />
+              <EldritchMatch />
             </IsSelected>
           }
         />
         <Route
-          path="/admin"
+          path="eldritch/admin"
           element={
-            <Admin />
+            <EldritchAdmin />
           }
         />
         <Route
-          path="/spectate"
+          path="eldritch/spectate"
           element={
-            <Spectator />
+            <EldritchSpectator />
+          }
+        />
+        <Route
+          path="mansions/"
+          element={
+            <MOMCharacterSelectPage />
+          }
+        />
+        <Route
+          path="mansions/game"
+          element={
+            <IsSelected>
+              <MOMMatch />
+            </IsSelected>
+          }
+        />
+        <Route
+          path="mansions/admin"
+          element={
+            <MOMAdmin />
           }
         />
       </Routes>

@@ -13,6 +13,7 @@ export interface IGameManager {
     addPlayer(gameId: string, player: IPlayer): void;
     kickPlayer(gameId: string, playerToken: string): void;
     isAdminToken(gameId: string, token: string): boolean;
+    findPlayerByToken(gameId: string, token: string): IPlayer | undefined;
 }
 
 export const gameManager = {
@@ -50,6 +51,18 @@ export const gameManager = {
         const state = gameManagerMap.get(gameId);
 
         if (state) state.players = state.players.filter(p => p.token !== playerToken);
+    },
+
+    findPlayerByToken: (gameId: string, token: string): IPlayer | undefined => {
+        const state = gameManagerMap.get(gameId);
+
+        return state ? state.players.find(p => p.token === token) : undefined;
+    },
+
+    findCharacterFieldByPlayerToken: (gameId: string, token: string, fieldKey: string) => {
+        const player = gameManager.findPlayerByToken(gameId, token);
+
+        return player?.character.fields.find(f => f.key === fieldKey);
     },
 
     isAdminToken: (gameId: string, token: string): boolean => {

@@ -1,9 +1,10 @@
-import { tokenService } from "../../../../runtime/service/token"
-import { gameManager } from "../../../../runtime/state/gameManager"
-import { IPlayer } from "../../../entities/player"
+import { ELDRITCH_ID } from ".."
+import { IPlayer } from "../../../core/entities/player"
+import { tokenService } from "../../../runtime/service/token"
+import { gameManager } from "../../../runtime/state/gameManager"
 
 export const setup = () => {
-    const gameId = 'eldritch'
+    const gameId = ELDRITCH_ID
 
     const reserve: IPlayer = {
         token: tokenService.createToken(gameId, 'reserve'),

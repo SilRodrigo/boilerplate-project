@@ -1,6 +1,6 @@
 import { IUseCase, withUseCaseResponse } from "../../../../types/UseCase";
 import InMemoryItemRepository from "../../../repositories/implementations/inMemory/ItemRepository";
-import { GameId } from "../../../fixtures";
+import { GameId } from "../../../../fixtures";
 import { IItem } from "../../../entities/item";
 
 interface IFactoryParams {

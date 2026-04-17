@@ -1,20 +1,21 @@
-import type { Catalog } from "../catalog";
 import type { IItem } from "../items";
-import { characters as eldritchCharacters } from "./eldritch";
 
 export type ScalarType = "number" | "string" | "boolean";
 export type CollectionType = "collection";
 
-interface ScalarField {
+
+export interface IBaseField {
   key: string;
   label: string;
+  type: any;
+}
+
+interface ScalarField extends IBaseField {
   type: ScalarType;
   value: number | string | boolean;
 }
 
-interface CollectionField {
-  key: string;
-  label: string;
+interface CollectionField extends IBaseField {
   type: CollectionType;
   value: IItem[];
 }
@@ -23,13 +24,5 @@ export type FieldType = ScalarField | CollectionField;
 
 export interface ICharacter {
   id: string;
-  name: string;
-  image: string;
-  quote: string;
-  bio: string;
-  job: string;
-  action: string;
-  passive: string;
-  initialSpace: string;
   fields: FieldType[];
 }

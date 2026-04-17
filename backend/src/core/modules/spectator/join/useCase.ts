@@ -2,7 +2,7 @@ import { tokenService } from "../../../../runtime/service/token";
 import { gameManager } from "../../../../runtime/state/gameManager";
 import { IUseCase, withUseCaseResponse } from "../../../../types/UseCase";
 import { ISpectator } from "../../../entities/spectator";
-import { GameId } from "../../../fixtures";
+import { GameId } from "../../../../fixtures";
 
 interface IFactoryParams { }
 

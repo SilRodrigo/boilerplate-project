@@ -1,61 +1,55 @@
 import type { FieldType, ICharacter } from "@/data/characters";
 import Avatar from "./sheet/Avatar";
 import Field from "./sheet/Field";
-import { useEffect, useState } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
+import { Textarea } from "../ui/textarea";
 
 type FieldTypeMap = {
   [key: string]: FieldType;
 };
 
-export function CharacterCard({
+export function MansionsOfMadnessCharacterCard({
   character,
-  delta,
   playerName,
+  characterList,
 }: {
   character: ICharacter;
   playerName?: string;
-  delta?: number;
+  characterList?: ICharacter[];
 }) {
   const {
-    quote,
-    bio,
-    action,
-    passive,
-    health,
     name,
+    bio,
+    ability,
+    health,
     sanity,
-    lore,
-    influence,
-    observation,
     strength,
+    agility,
+    observation,
+    lore,
     willpower,
-    items,
+    influence,
+    notations,
   } = Object.fromEntries(character.fields.map(f => [f.key, f])) as FieldTypeMap;
 
-  //-------
-  const [animate, setAnimate] = useState<"up" | "down" | null>(null)
+  let baseHealth, baseSanity;
 
-  useEffect(() => {
-    if (!delta) return
+  if (characterList) {
+    const baseCharacter = characterList.find(c => c.id === character.id);
 
-    setAnimate(delta > 0 ? "up" : "down")
+    if (baseCharacter) {
+      const {
+        health,
+        sanity,
+      } = Object.fromEntries(baseCharacter!.fields.map(f => [f.key, f])) as FieldTypeMap;
 
-    const t = setTimeout(() => setAnimate(null), 500)
-    return () => clearTimeout(t)
-  }, [delta])
-
-  //-------
+      baseHealth = health.value as number;
+      baseSanity = sanity.value as number;
+    }
+  }
 
   return (
-    <div
-      className={`
-    relative rounded-xl overflow-hidden
-    transition-all duration-300
-    ${animate === "up" ? "scale-101 ring-2 ring-green-500 hue-rotate-[90deg]" : ""}
-    ${animate === "down" ? "shake ring-2 ring-red-500 hue-rotate-[33deg]" : ""}
-  `}
-    >
+    <div className='relative rounded-xl overflow-hidden transition-all duration-300'>
       <div className="relative rounded-xl overflow-hidden shadow-lg shadow-black/30">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-90 sheet-background"
@@ -69,11 +63,10 @@ export function CharacterCard({
               </h3>
             </div>
 
-            {quote && bio && <Accordion className="w-full" type="single" collapsible>
+            {bio && <Accordion className="w-full" type="single" collapsible>
               <AccordionItem value="bio">
                 <AccordionTrigger className="cursor-pointer">Bio</AccordionTrigger>
                 <AccordionContent>
-                  {quote && <Field containerClassName="border-none" labelClassName="hidden" fieldClassName="before:content-['“'] after:content-['”'] italic text-sm" field={quote} />}
                   {bio && <Field containerClassName="border-none" labelClassName="hidden" field={bio} />}
                 </AccordionContent>
               </AccordionItem>
@@ -82,33 +75,30 @@ export function CharacterCard({
             <div className="md:flex items-start space-x-4 space-y-2">
               <div className="flex flex-col md:w-1/3 items-center pr-2 none space-y-2">
                 <Avatar
-                  imagePath={`/characters/eldritch/${(name.value as string).replace(" ", "_")}.webp`}
+                  imagePath={`/characters/mansions-of-madness/${(character.id)}.webp`}
                   characterId={character.id}
                 />
-                {action && <Field containerClassName="border-none" labelClassName="text-xs text-[var(--muted-text)]" fieldClassName="text-sm" field={action} />}
-                {passive && <Field containerClassName="border-none" labelClassName="text-xs text-[var(--muted-text)]" fieldClassName="text-sm" field={passive} />}
+                {ability && <Field containerClassName="border-none" labelClassName="text-xs text-[var(--muted-text)]" fieldClassName="text-sm" field={ability} />}
               </div>
 
               <div className="flex flex-col md:w-2/3 gap-2">
                 <div className="grid grid-cols-2 gap-2">
-                  {health && <Field field={health} icon="/icons/eldritch/health.png" />}
-                  {sanity && <Field field={sanity} icon="/icons/eldritch/sanity.png" />}
+                  {health && <Field baseFieldValue={baseHealth} field={health} icon="/icons/mansions-of-madness/health.png" />}
+                  {sanity && <Field baseFieldValue={baseSanity} field={sanity} icon="/icons/mansions-of-madness/sanity.png" />}
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-2">
-                  {lore && <Field field={lore} icon="/icons/eldritch/lore.png" />}
-                  {influence && <Field field={influence} icon="/icons/eldritch/influence.png" />}
-                  {observation && <Field field={observation} icon="/icons/eldritch/observation.png" />}
-                  {strength && <Field field={strength} icon="/icons/eldritch/strength.png" />}
-                  {willpower && <Field field={willpower} icon="/icons/eldritch/willpower.png" />}
+                  {strength && <Field field={strength} icon="/icons/mansions-of-madness/strength.png" />}
+                  {agility && <Field field={agility} icon="/icons/mansions-of-madness/agility.png" />}
+                  {observation && <Field field={observation} icon="/icons/mansions-of-madness/observation.png" />}
+                  {lore && <Field field={lore} icon="/icons/mansions-of-madness/lore.png" />}
+                  {influence && <Field field={influence} icon="/icons/mansions-of-madness/influence.png" />}
+                  {willpower && <Field field={willpower} icon="/icons/mansions-of-madness/willpower.png" />}
                 </div>
 
-                <div className="grid grid-cols-1">
-                  {items && <Field field={items} />}
-                </div>
-
-                <div className="grid grid-cols-1">
-
+                <div className="grid grid-cols-1 pt-1">
+                  <div className={'text-xs text-[var(--muted-text)] pb-1'}>Anotações</div>
+                  {notations && playerName && <Textarea defaultValue={notations.value as string} />}
                 </div>
               </div>
             </div>

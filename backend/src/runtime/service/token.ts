@@ -1,4 +1,4 @@
-import { GameId } from "../../core/fixtures";
+import { GameId } from "../../fixtures";
 
 export const tokenService = {
     createToken(gameId: string, playerId: string): string {
