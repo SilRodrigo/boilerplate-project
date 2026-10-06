@@ -76,7 +76,12 @@ export abstract class PrismaBaseRepository<T extends keyof typeof prismaClient, 
     ): Promise<IPaginationResult<E>> {
         const repository = $transaction?.[this.index] || this.repository;
 
-        const queryOptions: any = { where: filter, orderBy: order };
+        const queryOptions: any = {
+            where: filter,
+            orderBy: order,
+            skip: (currentPage - 1) * pageSize,
+            take: pageSize,
+        };
         if (include !== false) {
             queryOptions.include = {
                 ...this.include,
@@ -84,10 +89,13 @@ export abstract class PrismaBaseRepository<T extends keyof typeof prismaClient, 
             }
         }
 
-        let items = await repository.findMany(queryOptions);
+        const [rows, totalCount] = await Promise.all([
+            repository.findMany(queryOptions),
+            repository.count({ where: filter }),
+        ]);
 
-        items = items.map((item: any) => this.instance(item));
+        const items = rows.map((item: any) => this.instance(item));
 
-        return resultPaginated({ items, currentPage, pageSize, totalCount: items.length });
+        return resultPaginated({ items, currentPage, pageSize, totalCount });
     }
 }
