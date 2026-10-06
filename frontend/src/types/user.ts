@@ -1,8 +1,10 @@
+export type UserType = 'ADMIN' | 'USER';
+
+// Mirrors IUser from the backend (src/core/entities/user.ts)
 export interface User {
-  id?: number;
-  name: string;
+  id: string;
   email: string;
-  password: string;
-  userType: 'ADMIN' | 'USER';
+  userType: UserType;
   createdAt: string;
+  updatedAt: string;
 }

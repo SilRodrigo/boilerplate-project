@@ -1,121 +1,72 @@
+# Boilerplate Fullstack
 
-  
+Monorepo base para novos projetos. Faça um fork (ou copie) e construa em cima.
 
-#  📘 Programação para Internet – Univates
-
-  
-
-Este projeto contém um **monorepo** com:
-
-  
-
--  **Backend**: Node.js + Express + Prisma
-
--  **Frontend**: React + Vite + Tailwind + Shadcn
-
-  
+- **Backend**: Node.js + Express + TypeScript + Prisma (PostgreSQL) — detalhes em [backend/README.md](backend/README.md)
+- **Frontend**: React + Vite + Tailwind + Shadcn
 
 ---
 
-  
+## ✅ Requisitos
 
-##  ✅ Requisitos
-
-  
-
-Antes de rodar o projeto, é necessário ter instalado:
-
-  
-
--  **[Node.js LTS (>=18.x)](https://nodejs.org/)**
-
--  **[PostgreSQL](https://www.postgresql.org/)**
-
-  
-
-Verifique as instalações com:
-
-  
+- **[Node.js LTS (>=18.x)](https://nodejs.org/)**
+- **[PostgreSQL](https://www.postgresql.org/)**
 
 ```bash
-
 node -v
-
 npm -v
-
 psql --version
-
 ```
-
-  
 
 ---
 
-  
+## 🚀 Como rodar
 
-##  🚀 Como rodar do zero
-
-  
-
-###  1️⃣ Extrair o projeto
-
-Baixe o arquivo `.zip`, extraia para uma pasta e abra no terminal:
-
-  
-
-```bash
-
-cd projeto-integrador
-
-```
-
-  
-
-###  2️⃣ Instalar dependências
+### 1️⃣ Instalar dependências
 
 Na raiz do projeto:
 
-  
-
 ```bash
-
 npm install
-
 ```
 
-> Esse comando instala as dependências do **backend** e do **frontend** de uma vez.
+> Instala as dependências do **backend** e do **frontend** de uma vez (npm workspaces).
 
-  
+### 2️⃣ Configurar o ambiente
 
-Crie as tabelas no banco de dados:
-
-  
+Copie o arquivo de exemplo e ajuste a `DATABASE_URL`:
 
 ```bash
-
-npm run  prisma:db-push  --workspace  backend
-
+cp backend/.env.example backend/.env
 ```
-Para criar o primeiro usuario, acesse o banco diretamente
 
-  
+As variáveis disponíveis estão documentadas em [backend/README.md](backend/README.md#environment-variables). O frontend funciona sem `.env`; as opções estão em [frontend/README.md](frontend/README.md#configuração).
 
-###  3️⃣ Rodar o projeto
-
-Na raiz do projeto:
-
-  
+### 3️⃣ Criar as tabelas e o usuário admin
 
 ```bash
-
-npm run  dev
-
+npm run prisma:db-push --workspace backend
+npm run prisma:seed --workspace backend
 ```
 
-  
+> O seed cria o admin definido em `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` no `backend/.env`. Use essas credenciais no login do frontend.
 
-###  🌐 URLs
+### 4️⃣ Rodar
 
--  **Frontend**: [http://localhost:5173](http://localhost:5173)
+```bash
+npm run dev
+```
 
--  **Backend**: [http://localhost:4000](http://localhost:4000)
+### 🌐 URLs
+
+- **Frontend**: [http://localhost:5173](http://localhost:5173)
+- **Backend**: [http://localhost:4000/api/v1](http://localhost:4000/api/v1) (porta definida por `PORT_APP`)
+
+---
+
+## 📦 Build de produção
+
+```bash
+npm run build
+npm start --workspace backend
+```

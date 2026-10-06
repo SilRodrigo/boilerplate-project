@@ -5,7 +5,7 @@ export function successResponse<T>(response: Response, data: T, message: string 
 }
 
 export function errorResponse(response: Response, error: any, status: number = 400): Response {
-    return response.status(status).json({
+    return response.status(error?.status || status).json({
         data: null,
         message: error?.message || 'Unexpected error'
     });
