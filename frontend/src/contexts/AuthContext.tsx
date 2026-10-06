@@ -1,14 +1,15 @@
 import { createContext, useContext, type ReactNode } from "react";
 import { useAuth as useAuthHook } from "@/hooks/useAuth";
+import type { User } from "@/types/user";
 
 interface AuthContextType {
   token: string | null;
-  user: any;
+  user: User | null;
   isLoading: boolean;
   error: string | null;
-  login: (email: string, password: string) => Promise<any>;
+  login: (email: string, password: string) => Promise<{ accessToken: string; user: User }>;
   logout: () => void;
-  getAuthHeader: () => any;
+  getAuthHeader: () => Record<string, string>;
   isAuthenticated: boolean;
 }
 

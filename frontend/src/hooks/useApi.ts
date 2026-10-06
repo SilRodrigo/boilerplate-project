@@ -1,9 +1,8 @@
 import { useAuth } from "@/contexts/AuthContext";
-
-const API_BASE_URL = "http://localhost:4000/api/v1";
+import { API_BASE_URL } from "@/lib/api";
 
 export function useApi() {
-  const { getAuthHeader } = useAuth();
+  const { getAuthHeader, logout } = useAuth();
 
   return async (url: string, options: RequestInit = {}) => {
     const fullUrl = `${API_BASE_URL}${url}`;
@@ -18,10 +17,13 @@ export function useApi() {
       ...options,
       headers,
     });
-    
+
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Erro na requisição API');
+      // Expired or invalid token: drop the session so PrivateRoute sends the user to /login
+      if (response.status === 401) logout();
+
+      const errorData = await response.json().catch(() => null);
+      throw new Error(errorData?.message || 'Erro na requisição API');
     }
 
     return response.json();
