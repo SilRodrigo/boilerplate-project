@@ -1,5 +1,5 @@
 {
-  "name": "programacao-para-internet-univates",
+  "name": "boilerplate-project",
   "private": true,
   "workspaces": [
     "backend",
