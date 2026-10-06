@@ -40,13 +40,16 @@ Copie o arquivo de exemplo e ajuste a `DATABASE_URL`:
 cp backend/.env.example backend/.env
 ```
 
-As variáveis disponíveis estão documentadas em [backend/README.md](backend/README.md#environment-variables).
+As variáveis disponíveis estão documentadas em [backend/README.md](backend/README.md#environment-variables). O frontend funciona sem `.env`; as opções estão em [frontend/README.md](frontend/README.md#configuração).
 
-### 3️⃣ Criar as tabelas
+### 3️⃣ Criar as tabelas e o usuário admin
 
 ```bash
 npm run prisma:db-push --workspace backend
+npm run prisma:seed --workspace backend
 ```
+
+> O seed cria o admin definido em `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` no `backend/.env`. Use essas credenciais no login do frontend.
 
 ### 4️⃣ Rodar
 

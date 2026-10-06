@@ -39,12 +39,44 @@ For production, build once and start the compiled app:
 | `DATABASE_URL` | — | PostgreSQL connection string. Add `?connection_limit=N` to size the Prisma pool. |
 | `PORT_APP` | `3333` | HTTP port. |
 | `NODE_ENV` | — | `production` switches logs to the `combined` format. |
+| `JWT_SECRET` | — | **Required.** Secret used to sign access tokens. The server refuses to start without it. |
+| `JWT_EXPIRES_IN` | `1d` | Access token lifetime (`15m`, `12h`, `7d`...). |
+| `SEED_ADMIN_EMAIL` | `admin@example.com` | Admin created by `npm run prisma:seed`. |
+| `SEED_ADMIN_PASSWORD` | — | Password for the seeded admin. Required by the seed. |
 | `CORS_ORIGIN` | any origin | Comma separated list of allowed origins. **Set it in production.** |
 | `TRUST_PROXY` | `0` | Number of proxies in front of the app (nginx, load balancer). Required for correct client IPs in the rate limiter. |
 | `RATE_LIMIT_WINDOW_MS` | `60000` | Rate limit window. |
 | `RATE_LIMIT_MAX` | `300` | Max requests per IP per window. |
+| `AUTH_RATE_LIMIT_MAX` | `10` | Failed login attempts per IP every 15 minutes. |
 | `REQUEST_TIMEOUT_MS` | `30000` | Max time to receive a request. |
 | `SHUTDOWN_TIMEOUT_MS` | `10000` | Max time to drain connections on `SIGTERM`/`SIGINT` before forcing exit. |
+
+## Authentication
+
+JWT (HS256) authentication with a `User` model (`email`, bcrypt `password`, `userType`: `ADMIN` | `USER`).
+
+| Route | Description |
+| --- | --- |
+| `POST /api/v1/user/auth` | Body `{ email, password }`. Returns `{ accessToken, user }`. |
+| `GET /api/v1/user/me` | Returns the authenticated user. Requires `Authorization: Bearer <token>`. |
+
+Create the first admin after `prisma:db-push`:
+```
+  npm run prisma:seed
+```
+It uses `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` and never overwrites an existing user.
+
+To protect a route, add the middlewares from `src/middlewares`:
+```ts
+import { authMiddleware, adminMiddleware } from '../../middlewares';
+
+exampleRoutes.route('/')
+    .get(authMiddleware, exampleListController('handle'))
+    .post(authMiddleware, adminMiddleware, exampleCreateController('handle'));
+```
+`authMiddleware` puts the user on `request.user` (type controllers with `IAuthController` to read it). The password hash never leaves the repository: `IUser` has no password field, and only `findByEmailWithPassword` returns it.
+
+Use cases can throw `HttpError(message, status)` (from `src/helpers`) to control the status code returned by `errorResponse`.
 
 ## List endpoints
 

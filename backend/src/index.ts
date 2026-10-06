@@ -1,7 +1,7 @@
 import { config } from 'dotenv'
 
 import { server } from './server'
-import { IS_PRODUCTION, PORT_APP, REQUEST_TIMEOUT_MS, SHUTDOWN_TIMEOUT_MS } from './core/config';
+import { IS_PRODUCTION, JWT_SECRET, PORT_APP, REQUEST_TIMEOUT_MS, SHUTDOWN_TIMEOUT_MS } from './core/config';
 import { prismaClient } from './libs/PrismaClient';
 
 config();
@@ -9,6 +9,11 @@ config();
 const port = PORT_APP || 3333;
 
 async function bootstrap() {
+  if (!JWT_SECRET) {
+    console.error('JWT_SECRET is not set. Define it in the .env file.');
+    process.exit(1);
+  }
+
   try {
     await prismaClient.$connect();
   } catch (err) {

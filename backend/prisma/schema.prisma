@@ -17,3 +17,17 @@ model Example {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+enum UserType {
+  ADMIN
+  USER
+}
+
+model User {
+  id String @id @default(uuid())
+  email String @unique @db.VarChar(255)
+  password String
+  userType UserType @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
