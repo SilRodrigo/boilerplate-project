@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from "@/components/ui/table"
-import type { FieldType } from "@/data/characters"
+import type { FieldType } from "@/data/config"
 import { useGameSocket } from "@/hooks/useGameSocket"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"

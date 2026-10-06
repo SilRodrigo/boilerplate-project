@@ -1,4 +1,5 @@
-import type { FieldType, ICharacter } from "@/data/characters";
+import type { ICharacter } from "@/data/characters";
+import type { FieldType } from "@/data/config";
 import Avatar from "./sheet/Avatar";
 import Field from "./sheet/Field";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";

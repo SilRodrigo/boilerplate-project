@@ -16,7 +16,7 @@ export default function spectatorJoinUseCaseFactory({ }: IFactoryParams): ISpect
 
             gameManager.addSpectator(gameId, spectator);
 
-            return withUseCaseResponse({ token }, "Spectator added successfully.");
+            return withUseCaseResponse(spectator, "Spectator added successfully.");
         }
     };
 }

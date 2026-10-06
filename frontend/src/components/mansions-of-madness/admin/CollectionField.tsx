@@ -8,7 +8,7 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select"
-import { CATALOG } from "@/data/catalog"
+import { catalog } from "@/data/catalog"
 import { getAllItems } from "@/utils/getItems"
 import { useState } from "react"
 
@@ -25,7 +25,7 @@ export function AdminCollectionField({
     addItem,
     removeItem
 }: Props) {
-    const allItems = getAllItems(CATALOG.ELDRITCH)
+    const allItems = getAllItems(catalog.eldritch)
     const feitiços = allItems
         .filter(i => i.trait === 'Feitiço')
         .sort((a, b) => a.name.localeCompare(b.name))

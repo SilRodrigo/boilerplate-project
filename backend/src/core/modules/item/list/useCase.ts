@@ -1,20 +1,20 @@
 import { IUseCase, withUseCaseResponse } from "../../../../types/UseCase";
-import { ICharacter } from "../../../entities/character";
 import { CATALOG, GameId } from "../../../../fixtures";
+import { IItem } from "../../../entities/item";
 
 interface IFactoryParams { }
 
-export interface ICharacterListUseCase extends IUseCase<
+export interface IItemListUseCase extends IUseCase<
     { gameId: GameId },
-    ICharacter[]
+    IItem[]
 > { }
 
-export default function characterListUseCaseFactory({ }: IFactoryParams): ICharacterListUseCase {
+export default function itemListUseCaseFactory({ }: IFactoryParams): IItemListUseCase {
     return {
         execute: async ({ gameId }) => {
-            const result = CATALOG[gameId].characters;
+            const result = CATALOG[gameId].items;
 
-            return withUseCaseResponse(result, "Characters retrieved successfully.");
+            return withUseCaseResponse(result, "Items retrieved successfully.");
         }
     };
 }

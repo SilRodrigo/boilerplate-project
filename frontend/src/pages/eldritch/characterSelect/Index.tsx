@@ -6,6 +6,7 @@ import { getCharacter } from "@/api/characters";
 import { joinGame } from "@/api/game";
 import { applyTheme } from "@/theme/applyTheme";
 import { eldritchTheme } from "@/theme/eldritch";
+import { catalog, type GameId } from "@/data/catalog";
 
 export function EldritchCharacterSelectPage() {
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ export function EldritchCharacterSelectPage() {
         applyTheme(eldritchTheme);
 
         const updateCharacters = async () => {
-            const characters = await getCharacter('eldritch');
+            const characters = await getCharacter(catalog.eldritch as GameId);
 
             setCharacters(characters);
         }

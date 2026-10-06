@@ -1,6 +1,6 @@
-export const CATALOG = {
-  ELDRITCH: "eldritch",
-  MANSIONS_OF_MADNESS: "mansions_of_madness",
+export const catalog = {
+  eldritch: "eldritch",
+  mansions_of_madness: "mansions_of_madness",
 };
 
-export type GameId = keyof typeof CATALOG;
+export type GameId = keyof typeof catalog;

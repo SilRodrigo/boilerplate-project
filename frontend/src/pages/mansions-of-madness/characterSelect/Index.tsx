@@ -6,7 +6,7 @@ import { joinGame } from "@/api/game";
 import { MansionsOfMadnessCharacterCard } from "@/components/mansions-of-madness/MansionsOfMadnessCharacterCard";
 import { applyTheme } from "@/theme/applyTheme";
 import { eldritchTheme } from "@/theme/eldritch";
-import { CATALOG, type GameId } from "@/data/catalog";
+import { catalog, type GameId } from "@/data/catalog";
 
 export function MOMCharacterSelectPage() {
     const navigate = useNavigate();
@@ -16,7 +16,7 @@ export function MOMCharacterSelectPage() {
         applyTheme(eldritchTheme);
 
         const updateCharacters = async () => {
-            const characters = await getCharacter(CATALOG.MANSIONS_OF_MADNESS as GameId);
+            const characters = await getCharacter(catalog.mansions_of_madness as GameId);
 
             setCharacters(characters);
         }

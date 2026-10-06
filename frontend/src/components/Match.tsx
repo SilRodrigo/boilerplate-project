@@ -1,3 +1,5 @@
+import { getCharacter } from "@/api/characters";
+import type { GameId } from "@/data/catalog";
 import type { ICharacter } from "@/data/characters";
 import { useGameSocket, type IPlayer } from "@/hooks/useGameSocket";
 import { applyTheme } from "@/theme/applyTheme";
@@ -9,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 export default function Match({
     theme,
     CharacterCardComponent,
-    getCharacterList,
+    getCharacterList = () =>  getCharacter(theme.name.toUpperCase() as GameId),
 }: {
     theme: GameTheme;
     CharacterCardComponent: React.ComponentType<{
@@ -17,7 +19,7 @@ export default function Match({
         playerName: string;
         characterList?: ICharacter[];
     }>;
-    getCharacterList: () => Promise<ICharacter[]>;
+    getCharacterList?: () => Promise<ICharacter[]>;
 }) {
     const navigate = useNavigate();
     const { state } = useGameSocket();

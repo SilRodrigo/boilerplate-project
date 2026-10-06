@@ -3,8 +3,6 @@ import { ELDRITCH_ID } from "../../fixtures/eldritch";
 import { MANSIONS_OF_MADNESS_ID } from "../../fixtures/mansions-of-madness";
 import { gameManager } from "../state/gameManager";
 
-
-
 function startGameStates() {
     const initialGameIds: GameId[] = [ELDRITCH_ID, MANSIONS_OF_MADNESS_ID];
 

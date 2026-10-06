@@ -1,4 +1,5 @@
-import type { FieldType } from "@/data/characters";
+import { catalog } from "@/data/catalog";
+import type { FieldType } from "@/data/config";
 import { cn } from "@/lib/utils";
 import { getConfig } from "@/utils/getConfig";
 
@@ -21,7 +22,7 @@ export default function Field({
   fieldClassName = '',
   icon,
 }: FieldProps) {
-  const config = getConfig('eldritch');
+  const config = getConfig(catalog.eldritch as keyof typeof catalog);
 
   const label = (
     <div className={cn('text-sm pb-1', labelClassName)}>
