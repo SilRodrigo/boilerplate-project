@@ -9,10 +9,10 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
-import { menuOptions } from "../config/menuOptions"
+import { useMenuItems } from "@/hooks/useMenuItems"
 
 export function AppMenu() {
-
+  const menuItems = useMenuItems()
 
   return (
     <NavigationMenu viewport={false}>
@@ -21,7 +21,7 @@ export function AppMenu() {
           <NavigationMenuTrigger className="text-xl pl-0">Menu</NavigationMenuTrigger>
           <NavigationMenuContent className="z-10">
             <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[1fr_1fr]">
-              {menuOptions.map((option) => (
+              {menuItems.map((option) => (
                 <ListItem
                   key={option.title}
                   title={option.title}

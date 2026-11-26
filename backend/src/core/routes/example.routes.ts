@@ -23,4 +23,4 @@ exampleRoutes.route('/:id')
     .put(exampleUpdateController('handle'))
     .delete(exampleDeleteController('handle'));
 
-export { exampleRoutes }
+export default exampleRoutes;

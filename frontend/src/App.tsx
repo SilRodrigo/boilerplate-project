@@ -5,7 +5,8 @@ import { useAuth } from './contexts/AuthContext'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import ContentWrapper from './components/content-wrapper'
 import { AuthProvider } from './contexts/AuthContext'
-import HomePage from './pages/home/Index'
+import { allPages } from './hooks/useMenuItems'
+import { useAdminAccess } from './hooks/useAdminAccess'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -24,6 +25,16 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function AdminOnly({ children }: { children: React.ReactNode }) {
+  const isAdmin = useAdminAccess();
+
+  if (!isAdmin) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+}
+
 function App() {
   return (
     <AuthProvider>
@@ -31,16 +42,20 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
-          <Route
-            path="/"
-            element={
-              <PrivateRoute>
-                <ContentWrapper>
-                  <HomePage />
-                </ContentWrapper>
-              </PrivateRoute>
-            }
-          />
+          {/* Boilerplate pages (config/basePages.tsx) + project pages (config/pages.tsx) */}
+          {allPages.map((page) => (
+            <Route
+              key={page.path}
+              path={page.path}
+              element={
+                <PrivateRoute>
+                  <ContentWrapper>
+                    {page.adminOnly ? <AdminOnly>{page.element}</AdminOnly> : page.element}
+                  </ContentWrapper>
+                </PrivateRoute>
+              }
+            />
+          ))}
         </Routes>
       </BrowserRouter>
     </AuthProvider>

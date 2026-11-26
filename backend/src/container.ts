@@ -1,15 +1,14 @@
 import { createContainer, InjectionMode, Lifetime } from "awilix";
-import { PrismaExampleRepository, PrismaUserRepository } from "./core/repositories";
 
 const container = createContainer({
     injectionMode: InjectionMode.PROXY,
     strict: true,
 })
 
-export interface RequestContainer {
-    PrismaExampleRepository: PrismaExampleRepository;
-    PrismaUserRepository: PrismaUserRepository;
-}
+// Everything below is registered by convention (folder + file name), so new modules
+// never need to be listed here:
+// - core/repositories/implementations/prisma/FooRepository.ts -> prismaFooRepository
+// - core/modules/foo/create/useCase.ts                         -> fooCreateUseCase
 
 // Repositories
 container.loadModules(

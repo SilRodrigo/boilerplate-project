@@ -48,6 +48,9 @@ For production, build once and start the compiled app:
 | `RATE_LIMIT_WINDOW_MS` | `60000` | Rate limit window. |
 | `RATE_LIMIT_MAX` | `300` | Max requests per IP per window. |
 | `AUTH_RATE_LIMIT_MAX` | `10` | Failed login attempts per IP every 15 minutes. |
+| `REGISTRATION_ENABLED` | `false` | `true` opens public sign-up at `POST /user/register`. |
+| `REGISTER_RATE_LIMIT_MAX` | `5` | Sign-ups per IP every hour. |
+| `PASSWORD_MIN_LENGTH` | `8` | Minimum password length for new accounts. |
 | `REQUEST_TIMEOUT_MS` | `30000` | Max time to receive a request. |
 | `SHUTDOWN_TIMEOUT_MS` | `10000` | Max time to drain connections on `SIGTERM`/`SIGINT` before forcing exit. |
 
@@ -59,6 +62,8 @@ JWT (HS256) authentication with a `User` model (`email`, bcrypt `password`, `use
 | --- | --- |
 | `POST /api/v1/user/auth` | Body `{ email, password }`. Returns `{ accessToken, user }`. |
 | `GET /api/v1/user/me` | Returns the authenticated user. Requires `Authorization: Bearer <token>`. |
+| `POST /api/v1/user/register` | Body `{ email, password }`. Creates a `USER` and returns `{ accessToken, user }`. Only when `REGISTRATION_ENABLED=true` (otherwise 403). Duplicate email: 409. |
+| `GET /api/v1/user` | Paginated user list (same params as the list endpoints below). Admin only. |
 
 Create the first admin after `prisma:db-push`:
 ```
@@ -77,6 +82,19 @@ exampleRoutes.route('/')
 `authMiddleware` puts the user on `request.user` (type controllers with `IAuthController` to read it). The password hash never leaves the repository: `IUser` has no password field, and only `findByEmailWithPassword` returns it.
 
 Use cases can throw `HttpError(message, status)` (from `src/helpers`) to control the status code returned by `errorResponse`.
+
+## Adding a module (extension points)
+
+New features never need to touch a central file, so a project derived from the boilerplate can keep pulling its updates without merge conflicts:
+
+| What | Where | How it is picked up |
+| --- | --- | --- |
+| Prisma models | a new `prisma/schema/<domain>.prisma` | Prisma merges every file in `prisma/schema/`. `schema.prisma` only holds the generator and datasource; `user.prisma` is the base model. |
+| Repository | `src/core/repositories/implementations/prisma/FooRepository.ts` | Registered in the container as `prismaFooRepository`. Import its type straight from the file. |
+| Use cases and controllers | `src/core/modules/foo/<action>/useCase.ts` and `controller.ts` | Registered as `fooCreateUseCase`, `fooCreateController`... |
+| Routes | `src/core/routes/foo.routes.ts`, default-exporting a `Router` | Mounted at `/api/v1/foo`. Export `basePath` to mount it elsewhere. |
+
+The `example` module (`prisma/schema/example.prisma`, `src/core/modules/example`, `example.routes.ts` and its DTO/entity/repository) is only a reference: delete it when you no longer need it.
 
 ## List endpoints
 

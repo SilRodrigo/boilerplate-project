@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
-import { menuOptions } from '../../config/menuOptions'
+import { useMenuItems } from '../../hooks/useMenuItems'
 
 export default function HomePage() {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const menuItems = useMenuItems()
 
   return (
     <div className="md:p-8">
@@ -34,7 +35,7 @@ export default function HomePage() {
 
           {/* Menu Options */}
           <div className="lg:col-span-2 space-y-4">
-            {menuOptions.filter(option => option.title !== 'Home').map((option) => {
+            {menuItems.filter(option => option.path !== '/').map((option) => {
               const IconComponent = option.icon
               return (
                 <button

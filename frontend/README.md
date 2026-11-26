@@ -30,7 +30,7 @@ src/
 │   ├── forms/         # BaseForm e formulários
 │   ├── list-header.tsx
 │   └── list-table.tsx
-├── config/            # menuOptions
+├── config/            # basePages (do boilerplate), pages (do projeto), pageTypes
 ├── contexts/          # AuthContext
 ├── hooks/             # useAuth, useApi, useList, useAdminAccess
 ├── lib/               # api.ts (URL base), utils
@@ -152,7 +152,20 @@ export default function ExamplesPage() {
 }
 ```
 
-Depois registre a rota em `App.tsx` (dentro de `<PrivateRoute>`) e, se quiser, adicione a página em `src/config/menuOptions.ts`.
+Depois registre a página em `src/config/pages.tsx`. Ela vira uma rota privada e um item do menu (e um card na Home):
+
+```tsx
+import { Folder } from 'lucide-react'
+import ExamplesPage from '../pages/examples/Index'
+
+export const pages: AppPage[] = [
+  { path: '/examples', element: <ExamplesPage />, title: 'Exemplos', description: 'Gerencie os exemplos', icon: Folder },
+]
+```
+
+- `adminOnly: true` esconde a página do menu para quem não é admin e redireciona para a Home se alguém abrir a URL.
+- `hideFromMenu: true` registra a rota sem item no menu (ex.: página de detalhe).
+- Não edite `src/config/basePages.tsx` num projeto derivado: ali ficam as páginas do boilerplate (Home e Usuários). Assim as atualizações do boilerplate entram sem conflito.
 
 - `useList` busca a lista em `fetchUrl`, guarda o item selecionado, mostra toasts de sucesso e erro e recarrega a lista após criar, editar ou excluir.
 - `ListTable` aceita `render` por coluna para formatar valores e `rowActions` para ações extras por linha.

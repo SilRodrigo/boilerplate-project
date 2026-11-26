@@ -64,6 +64,33 @@ npm run dev
 
 ---
 
+## 🌱 Criando um projeto a partir do boilerplate
+
+Crie o projeto num repositório próprio, mas com o histórico do boilerplate. Assim dá para puxar as melhorias da `master` depois.
+
+```bash
+git clone https://github.com/SilRodrigo/boilerplate-project.git meu-projeto
+cd meu-projeto
+git remote rename origin upstream
+git remote add origin <url-do-repositorio-novo>
+git push -u origin master
+```
+
+Quando sair uma melhoria no boilerplate:
+
+```bash
+git fetch upstream
+git merge upstream/master
+```
+
+Para os merges não darem conflito, o projeto **adiciona arquivos** em vez de editar os do boilerplate:
+
+- **Backend:** modelos em `prisma/schema/<dominio>.prisma`, módulos em `src/core/modules/<entidade>/`, rotas em `src/core/routes/<entidade>.routes.ts`. Tudo é carregado por convenção; veja [backend/README.md](backend/README.md#adding-a-module-extension-points).
+- **Frontend:** páginas do projeto em `src/config/pages.tsx`; veja [frontend/README.md](frontend/README.md#criando-uma-página-de-crud).
+- Melhorias genéricas (autenticação, cadastro, componentes) vão primeiro para o boilerplate e depois são puxadas para o projeto.
+
+---
+
 ## 📦 Build de produção
 
 ```bash
