@@ -22,12 +22,10 @@ interface IFactoryParams {
 }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-// bcrypt ignores everything after 72 bytes
 const PASSWORD_MAX_BYTES = 72;
 
 export interface IUserRegisterUseCase extends IUseCase<IRequest, IResponse> { }
 
-/** Public sign-up. Always creates a USER; admins only come from the seed. */
 export default function userRegisterUseCaseFactory({
     prismaUserRepository
 }: IFactoryParams): IUserRegisterUseCase {

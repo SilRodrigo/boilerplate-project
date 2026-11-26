@@ -25,7 +25,6 @@ const authRateLimit = rateLimit({
     message: { data: null, message: 'Too many login attempts, please try again later.' },
 });
 
-// Every sign-up counts, successful or not, to slow down mass account creation.
 const registerRateLimit = rateLimit({
     windowMs: 60 * 60_000,
     limit: REGISTER_RATE_LIMIT_MAX,

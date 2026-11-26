@@ -31,11 +31,8 @@ export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1d';
 /** Failed login attempts allowed per IP in a 15 minute window. */
 export const AUTH_RATE_LIMIT_MAX = Number(process.env.AUTH_RATE_LIMIT_MAX || 10);
 
-/** Allows anyone to create a USER account at POST /user/register. Off by default (admin panels usually don't want it). */
 export const REGISTRATION_ENABLED = process.env.REGISTRATION_ENABLED === 'true';
 
-/** Sign-ups allowed per IP in a 1 hour window. */
 export const REGISTER_RATE_LIMIT_MAX = Number(process.env.REGISTER_RATE_LIMIT_MAX || 5);
 
-/** Minimum password length for new accounts. */
 export const PASSWORD_MIN_LENGTH = Number(process.env.PASSWORD_MIN_LENGTH || 8);

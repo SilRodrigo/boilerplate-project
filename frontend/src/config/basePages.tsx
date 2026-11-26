@@ -3,11 +3,6 @@ import HomePage from '../pages/home/Index'
 import UsersPage from '../pages/users/Index'
 import type { AppPage, MenuItem } from './pageTypes'
 
-/*
- * Pages that come with the boilerplate. Derived projects should not edit this
- * file (it would conflict when pulling boilerplate updates): add your pages to
- * pages.tsx instead.
- */
 export const basePages: AppPage[] = [
   {
     path: '/',

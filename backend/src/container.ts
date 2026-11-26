@@ -5,11 +5,6 @@ const container = createContainer({
     strict: true,
 })
 
-// Everything below is registered by convention (folder + file name), so new modules
-// never need to be listed here:
-// - core/repositories/implementations/prisma/FooRepository.ts -> prismaFooRepository
-// - core/modules/foo/create/useCase.ts                         -> fooCreateUseCase
-
 // Repositories
 container.loadModules(
     [

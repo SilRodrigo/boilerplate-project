@@ -5,7 +5,6 @@ import { useAdminAccess } from "./useAdminAccess"
 
 export const allPages = [...basePages, ...pages]
 
-/** Menu entries the current user may see: boilerplate pages, project pages, then Logout. */
 export function useMenuItems(): MenuItem[] {
   const isAdmin = useAdminAccess()
 

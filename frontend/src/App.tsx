@@ -42,7 +42,6 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
-          {/* Boilerplate pages (config/basePages.tsx) + project pages (config/pages.tsx) */}
           {allPages.map((page) => (
             <Route
               key={page.path}

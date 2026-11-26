@@ -11,7 +11,6 @@ interface IFactoryParams {
 
 export interface IUserListController extends IAuthController<any> { }
 
-// Admin only (see user.routes.ts). The password hash never leaves the repository.
 export default function userListControllerFactory({
     userListUseCase
 }: IFactoryParams): IUserListController {

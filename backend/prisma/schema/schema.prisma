@@ -1,9 +1,3 @@
-// Prisma schema split into several files (one per domain). Prisma merges every
-// .prisma file in this folder. This file holds only the generator and datasource;
-// models live next to it: user.prisma (base), example.prisma (reference module).
-// Projects built on the boilerplate add their own files here instead of editing these.
-// https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }

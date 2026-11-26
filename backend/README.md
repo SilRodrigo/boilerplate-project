@@ -94,6 +94,8 @@ New features never need to touch a central file, so a project derived from the b
 | Use cases and controllers | `src/core/modules/foo/<action>/useCase.ts` and `controller.ts` | Registered as `fooCreateUseCase`, `fooCreateController`... |
 | Routes | `src/core/routes/foo.routes.ts`, default-exporting a `Router` | Mounted at `/api/v1/foo`. Export `basePath` to mount it elsewhere. |
 
+Step-by-step guide with full code (in Portuguese): [docs/novo-modulo.md](../docs/novo-modulo.md).
+
 The `example` module (`prisma/schema/example.prisma`, `src/core/modules/example`, `example.routes.ts` and its DTO/entity/repository) is only a reference: delete it when you no longer need it.
 
 ## List endpoints

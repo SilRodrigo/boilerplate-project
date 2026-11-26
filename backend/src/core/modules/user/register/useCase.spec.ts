@@ -2,7 +2,6 @@ import { Prisma } from "@prisma/client";
 
 let mockRegistrationEnabled = true;
 
-// jest.mock is hoisted above the variable, so the flag is read lazily through a getter
 jest.mock("../../../config", () => ({
     JWT_SECRET: "test-secret",
     JWT_EXPIRES_IN: "1h",

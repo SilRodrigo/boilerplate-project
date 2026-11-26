@@ -6,14 +6,6 @@ import { PREFIX_ROUTE } from '../url';
 
 import { responseValidator } from '../../middlewares/responseValidatorMiddleware';
 
-/*
- * Every `<name>.routes.ts` file in this folder is mounted automatically, so new
- * modules never need to touch this file.
- *
- * - The file default-exports an express Router.
- * - It is mounted at `${PREFIX_ROUTE}/<name>` (e.g. `example.routes.ts` -> `/api/v1/example`).
- * - To mount it somewhere else, also export `basePath` (e.g. `export const basePath = '/game/ranch'`).
- */
 const ROUTE_FILE = /^(.+)\.routes\.(js|ts)$/;
 
 interface IRouteModule {

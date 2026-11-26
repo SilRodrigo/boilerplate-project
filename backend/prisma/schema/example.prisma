@@ -1,5 +1,3 @@
-// Reference module. Delete this file together with src/core/modules/example when you no longer need it.
-
 model Example {
   id String @id @default(uuid())
   name String @db.VarChar(150)

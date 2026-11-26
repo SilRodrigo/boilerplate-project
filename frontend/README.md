@@ -165,6 +165,7 @@ export const pages: AppPage[] = [
 
 - `adminOnly: true` esconde a página do menu para quem não é admin e redireciona para a Home se alguém abrir a URL.
 - `hideFromMenu: true` registra a rota sem item no menu (ex.: página de detalhe).
+- Passo a passo de um módulo completo, do banco à tela: [docs/novo-modulo.md](../docs/novo-modulo.md).
 - Não edite `src/config/basePages.tsx` num projeto derivado: ali ficam as páginas do boilerplate (Home e Usuários). Assim as atualizações do boilerplate entram sem conflito.
 
 - `useList` busca a lista em `fetchUrl`, guarda o item selecionado, mostra toasts de sucesso e erro e recarrega a lista após criar, editar ou excluir.

@@ -89,6 +89,8 @@ Para os merges não darem conflito, o projeto **adiciona arquivos** em vez de ed
 - **Frontend:** páginas do projeto em `src/config/pages.tsx`; veja [frontend/README.md](frontend/README.md#criando-uma-página-de-crud).
 - Melhorias genéricas (autenticação, cadastro, componentes) vão primeiro para o boilerplate e depois são puxadas para o projeto.
 
+O passo a passo de um módulo completo (do banco até a tela) e a lista de arquivos que o projeto não deve editar estão em [docs/novo-modulo.md](docs/novo-modulo.md).
+
 ---
 
 ## 📦 Build de produção

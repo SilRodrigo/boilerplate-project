@@ -5,7 +5,6 @@ import type { User } from "@/types/user"
 
 const ORDER = encodeURIComponent(JSON.stringify({ createdAt: 'desc' }))
 
-// Admin only (the route and the API both check it). Read-only for now.
 export default function UsersPage() {
   const { items, isLoading, error } = useList<User>({
     fetchUrl: `/user?pageSize=100&order=${ORDER}`,

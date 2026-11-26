@@ -1,5 +1,3 @@
-// Base model of the boilerplate (authentication). Change it in the boilerplate, not in derived projects.
-
 enum UserType {
   ADMIN
   USER
