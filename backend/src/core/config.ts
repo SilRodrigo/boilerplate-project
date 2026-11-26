@@ -30,3 +30,9 @@ export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1d';
 
 /** Failed login attempts allowed per IP in a 15 minute window. */
 export const AUTH_RATE_LIMIT_MAX = Number(process.env.AUTH_RATE_LIMIT_MAX || 10);
+
+export const REGISTRATION_ENABLED = process.env.REGISTRATION_ENABLED === 'true';
+
+export const REGISTER_RATE_LIMIT_MAX = Number(process.env.REGISTER_RATE_LIMIT_MAX || 5);
+
+export const PASSWORD_MIN_LENGTH = Number(process.env.PASSWORD_MIN_LENGTH || 8);
