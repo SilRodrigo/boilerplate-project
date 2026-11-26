@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt";
-import { Prisma } from "@prisma/client";
 import { IUser } from "../../../entities/user";
 import { IUseCase, withUseCaseResponse } from "../../../../types/UseCase";
-import { PrismaUserRepository } from "../../../repositories";
+import { IUserRepository } from "../../../repositories";
 import { HttpError } from "../../../../helpers/httpError";
+import { DuplicateError } from "../../../../helpers/duplicateError";
 import { signAccessToken } from "../../../../libs/jwt";
 import { PASSWORD_MIN_LENGTH, REGISTRATION_ENABLED } from "../../../config";
 
@@ -18,7 +18,7 @@ interface IResponse {
 }
 
 interface IFactoryParams {
-    prismaUserRepository: PrismaUserRepository;
+    userRepository: IUserRepository;
 }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -27,7 +27,7 @@ const PASSWORD_MAX_BYTES = 72;
 export interface IUserRegisterUseCase extends IUseCase<IRequest, IResponse> { }
 
 export default function userRegisterUseCaseFactory({
-    prismaUserRepository
+    userRepository
 }: IFactoryParams): IUserRegisterUseCase {
     return {
         execute: async ({ email, password }) => {
@@ -49,13 +49,13 @@ export default function userRegisterUseCaseFactory({
 
             let user: IUser;
             try {
-                user = await prismaUserRepository.create({
+                user = await userRepository.create({
                     email: normalizedEmail,
                     password: await bcrypt.hash(password, 10),
                     userType: "USER",
                 });
             } catch (err) {
-                if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
+                if (err instanceof DuplicateError) {
                     throw new HttpError("Email already registered.", 409);
                 }
                 throw err;

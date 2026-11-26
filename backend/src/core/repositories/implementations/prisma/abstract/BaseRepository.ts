@@ -1,9 +1,22 @@
+import { Prisma, PrismaClient } from "@prisma/client";
 import { resultPaginated } from "../../../../../helpers";
+import { DuplicateError } from "../../../../../helpers/duplicateError";
 import { IPaginationResult } from "../../../../../helpers/pagination";
-import { PrismaClient } from "@prisma/client";
 import { prismaClient } from "../../../../../libs";
+import { IListQuery } from "../../../../../types/ListQuery";
+import { IBaseRepository } from "../../../contracts/IBaseRepository";
+import { toPrismaOrderBy, toPrismaWhere } from "./listQueryToPrisma";
 
-export abstract class PrismaBaseRepository<T extends keyof typeof prismaClient, I, E, C, R, U> {
+const rethrowDuplicate = (err: unknown): never => {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
+        const target = (err.meta as { target?: string[] | string } | undefined)?.target;
+        throw new DuplicateError(Array.isArray(target) ? target : target ? [target] : []);
+    }
+    throw err;
+};
+
+export abstract class PrismaBaseRepository<T extends keyof typeof prismaClient, I, E, C, R, U, F extends string = string>
+    implements IBaseRepository<E, C, U, F> {
 
     private index: keyof typeof prismaClient;
     private include: I;
@@ -26,7 +39,7 @@ export abstract class PrismaBaseRepository<T extends keyof typeof prismaClient, 
         const repository = $transaction?.[this.index] || this.repository;
         const entity = await repository.create({
             data
-        });
+        }).catch(rethrowDuplicate);
 
         return this.instance(entity);
     }
@@ -36,7 +49,7 @@ export abstract class PrismaBaseRepository<T extends keyof typeof prismaClient, 
         const entity = await repository.update({
             data,
             where: { id }
-        });
+        }).catch(rethrowDuplicate);
 
         return this.instance(entity);
     }
@@ -70,15 +83,16 @@ export abstract class PrismaBaseRepository<T extends keyof typeof prismaClient, 
         return this.findByUnique({ id }, include, $transaction);
     }
 
-    async findByFilter<T, O>(
-        { currentPage, pageSize, filter, include, order }: { currentPage: number, pageSize: number, filter: T, include?: I | false, order?: O },
+    async findByFilter(
+        { currentPage, pageSize, filter, order, include }: IListQuery<F> & { include?: I | false },
         $transaction?: PrismaClient
     ): Promise<IPaginationResult<E>> {
         const repository = $transaction?.[this.index] || this.repository;
+        const where = toPrismaWhere(filter);
 
         const queryOptions: any = {
-            where: filter,
-            orderBy: order,
+            where,
+            orderBy: toPrismaOrderBy(order),
             skip: (currentPage - 1) * pageSize,
             take: pageSize,
         };
@@ -91,7 +105,7 @@ export abstract class PrismaBaseRepository<T extends keyof typeof prismaClient, 
 
         const [rows, totalCount] = await Promise.all([
             repository.findMany(queryOptions),
-            repository.count({ where: filter }),
+            repository.count({ where }),
         ]);
 
         const items = rows.map((item: any) => this.instance(item));

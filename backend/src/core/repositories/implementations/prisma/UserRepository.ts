@@ -1,5 +1,6 @@
 import { IUser, userFactory } from "../../../entities/user";
-import { ICreateUserDto, IRequestUserDto, IUpdateUserDto, IIncludeUserDto } from "../../../dtos";
+import { ICreateUserDto, IRequestUserDto, IUpdateUserDto, IIncludeUserDto, UserFilterField } from "../../../dtos";
+import { IUserRepository } from "../../contracts/IUserRepository";
 import { PrismaBaseRepository } from "./abstract/BaseRepository";
 
 const INDEX_KEY = 'user' as const;
@@ -10,7 +11,8 @@ export default class PrismaUserRepository extends PrismaBaseRepository<
     IUser,
     ICreateUserDto,
     IRequestUserDto,
-    IUpdateUserDto> {
+    IUpdateUserDto,
+    UserFilterField> implements IUserRepository {
 
     constructor() {
         const include = {}

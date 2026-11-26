@@ -1,24 +1,24 @@
 import { IUseCase, withUseCaseResponse } from "../../../../types/UseCase";
-import { PrismaExampleRepository } from "../../../repositories";
+import { IExampleRepository } from "../../../repositories";
 
 interface IFactoryParams {
-    prismaExampleRepository: PrismaExampleRepository;
+    exampleRepository: IExampleRepository;
 }
 
 export interface IExampleDeleteUseCase extends IUseCase<string, void> { }
 
 export default function exampleDeleteUseCaseFactory({
-    prismaExampleRepository
+    exampleRepository
 }: IFactoryParams): IExampleDeleteUseCase {
     return {
         execute: async (id) => {
-            const example = await prismaExampleRepository.findById(id);
+            const example = await exampleRepository.findById(id);
 
             if (!example) {
                 throw new Error("Example not found.");
             }
 
-            await prismaExampleRepository.delete(id);
+            await exampleRepository.delete(id);
 
             return withUseCaseResponse(undefined, "Example deleted successfully.");
         }

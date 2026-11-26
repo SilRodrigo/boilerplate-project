@@ -18,22 +18,22 @@ const makeUser = async (password: string) => ({
 });
 
 const makeSut = (user: Awaited<ReturnType<typeof makeUser>> | null) => {
-    const prismaUserRepository = {
+    const userRepository = {
         findByEmailWithPassword: jest.fn().mockResolvedValue(user),
     };
 
-    const useCase = userAuthUseCaseFactory({ prismaUserRepository: prismaUserRepository as any });
+    const useCase = userAuthUseCaseFactory({ userRepository: userRepository as any });
 
-    return { useCase, prismaUserRepository };
+    return { useCase, userRepository };
 };
 
 describe("userAuthUseCase", () => {
     it("returns a token and the user without the password hash", async () => {
-        const { useCase, prismaUserRepository } = makeSut(await makeUser("secret"));
+        const { useCase, userRepository } = makeSut(await makeUser("secret"));
 
         const { data } = await useCase.execute({ email: " Admin@Example.com ", password: "secret" });
 
-        expect(prismaUserRepository.findByEmailWithPassword).toHaveBeenCalledWith("admin@example.com");
+        expect(userRepository.findByEmailWithPassword).toHaveBeenCalledWith("admin@example.com");
         expect(data?.user).toEqual(expect.objectContaining({ id: "user-id", userType: "ADMIN" }));
         expect(data?.user).not.toHaveProperty("password");
         await expect(verifyAccessToken(data!.accessToken)).resolves.toEqual({ userId: "user-id" });

@@ -8,17 +8,11 @@ const container = createContainer({
 // Repositories
 container.loadModules(
     [
-        `core/repositories/implementations/**/*.js`,
+        `core/repositories/implementations/prisma/**/*.js`,
     ],
     {
         cwd: __dirname,
-        formatName: (name, descriptor) => {
-            const isWin = descriptor.path.includes('\\');
-            const splat = descriptor.path.split(isWin ? '\\' : '/')
-            const namespace = splat[splat.length - 2]
-            const upperNamespace = namespace.charAt(0) + namespace.substring(1)
-            return upperNamespace + name
-        },
+        formatName: 'camelCase',
         resolverOptions: {
             lifetime: Lifetime.SINGLETON,
         },

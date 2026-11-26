@@ -1,7 +1,3 @@
-import PrismaExampleRepository from './implementations/prisma/ExampleRepository';
-import PrismaUserRepository from './implementations/prisma/UserRepository';
-
-export {
-    PrismaExampleRepository,
-    PrismaUserRepository,
-}
+export { IBaseRepository } from './contracts/IBaseRepository';
+export { IExampleRepository } from './contracts/IExampleRepository';
+export { IUserRepository } from './contracts/IUserRepository';

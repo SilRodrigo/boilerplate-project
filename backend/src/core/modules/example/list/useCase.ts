@@ -1,11 +1,11 @@
 import { IExample } from "../../../entities/example";
 import { IFilterExampleDto, IOrderExampleDto } from "../../../dtos/example";
 import { IUseCase, withUseCaseResponse } from "../../../../types/UseCase";
-import { PrismaExampleRepository } from "../../../repositories";
+import { IExampleRepository } from "../../../repositories";
 import { IPaginationParams, IPaginationResult } from "../../../../helpers/pagination";
 
 interface IFactoryParams {
-    prismaExampleRepository: PrismaExampleRepository;
+    exampleRepository: IExampleRepository;
 }
 
 export interface IExampleListUseCase extends IUseCase<
@@ -14,11 +14,11 @@ export interface IExampleListUseCase extends IUseCase<
 > { }
 
 export default function exampleListUseCaseFactory({
-    prismaExampleRepository
+    exampleRepository
 }: IFactoryParams): IExampleListUseCase {
     return {
         execute: async ({ currentPage, pageSize, filter, order }) => {
-            const result = await prismaExampleRepository.findByFilter({
+            const result = await exampleRepository.findByFilter({
                 currentPage,
                 pageSize,
                 filter: filter,

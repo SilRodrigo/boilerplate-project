@@ -1,22 +1,22 @@
 import { IExample } from "../../../entities/example";
 import { ICreateExampleDto, IFilterExampleDto } from "../../../dtos/example";
 import { IUseCase, withUseCaseResponse } from "../../../../types/UseCase";
-import { PrismaExampleRepository } from "../../../repositories";
+import { IExampleRepository } from "../../../repositories";
 
 interface IFactoryParams {
-    prismaExampleRepository: PrismaExampleRepository;
+    exampleRepository: IExampleRepository;
 }
 
 export interface IExampleCreateUseCase extends IUseCase<ICreateExampleDto, IExample> { }
 
 export default function exampleCreateUseCaseFactory({
-    prismaExampleRepository
+    exampleRepository
 }: IFactoryParams): IExampleCreateUseCase {
     return {
         execute: async (data) => {
             if (data.name) {
                 const filter: IFilterExampleDto = { name: data.name };
-                const result = await prismaExampleRepository.findByFilter({ currentPage: 1, pageSize: 1, filter });
+                const result = await exampleRepository.findByFilter({ currentPage: 1, pageSize: 1, filter });
                 const [exampleExists] = result.items;
 
                 if (exampleExists) {
@@ -24,7 +24,7 @@ export default function exampleCreateUseCaseFactory({
                 }
             }
 
-            const example = await prismaExampleRepository.create(data);
+            const example = await exampleRepository.create(data);
 
             return withUseCaseResponse(example, "Example created successfully.");
         }

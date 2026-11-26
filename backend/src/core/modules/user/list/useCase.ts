@@ -1,11 +1,11 @@
 import { IUser } from "../../../entities/user";
 import { IFilterUserDto, IOrderUserDto } from "../../../dtos/user";
 import { IUseCase, withUseCaseResponse } from "../../../../types/UseCase";
-import { PrismaUserRepository } from "../../../repositories";
+import { IUserRepository } from "../../../repositories";
 import { IPaginationParams, IPaginationResult } from "../../../../helpers/pagination";
 
 interface IFactoryParams {
-    prismaUserRepository: PrismaUserRepository;
+    userRepository: IUserRepository;
 }
 
 export interface IUserListUseCase extends IUseCase<
@@ -14,11 +14,11 @@ export interface IUserListUseCase extends IUseCase<
 > { }
 
 export default function userListUseCaseFactory({
-    prismaUserRepository
+    userRepository
 }: IFactoryParams): IUserListUseCase {
     return {
         execute: async ({ currentPage, pageSize, filter, order }) => {
-            const result = await prismaUserRepository.findByFilter({
+            const result = await userRepository.findByFilter({
                 currentPage,
                 pageSize,
                 filter,
