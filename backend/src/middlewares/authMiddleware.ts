@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { AwilixContainer } from "awilix";
-import { PrismaUserRepository } from "../core/repositories";
+import { IUserRepository } from "../core/repositories";
 import { errorResponse } from "../helpers/response";
 import { IUser } from "../core/entities/user";
 import { InvalidTokenError, TokenExpiredError, verifyAccessToken } from "../libs/jwt";
@@ -23,7 +23,7 @@ export const authMiddleware = async (request: Request, res: Response, next: Next
   try {
     const { userId } = await verifyAccessToken(token);
 
-    const userRepository = req.container.resolve<PrismaUserRepository>('prismaUserRepository');
+    const userRepository = req.container.resolve<IUserRepository>('userRepository');
     const user = await userRepository.findById(userId);
 
     if (!user) {

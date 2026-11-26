@@ -1,26 +1,26 @@
 import { IExample } from "../../../entities/example";
 import { IUpdateExampleDto } from "../../../dtos/example";
 import { IUseCase, withUseCaseResponse } from "../../../../types/UseCase";
-import { PrismaExampleRepository } from "../../../repositories";
+import { IExampleRepository } from "../../../repositories";
 
 interface IFactoryParams {
-    prismaExampleRepository: PrismaExampleRepository;
+    exampleRepository: IExampleRepository;
 }
 
 export interface IExampleUpdateUseCase extends IUseCase<{ id: string } & IUpdateExampleDto, IExample> { }
 
 export default function exampleUpdateUseCaseFactory({
-    prismaExampleRepository
+    exampleRepository
 }: IFactoryParams): IExampleUpdateUseCase {
     return {
         execute: async ({ id, ...data }) => {
-            const example = await prismaExampleRepository.findById(id);
+            const example = await exampleRepository.findById(id);
 
             if (!example) {
                 throw new Error("Example not found.");
             }
 
-            const updatedExample = await prismaExampleRepository.update(id, data);
+            const updatedExample = await exampleRepository.update(id, data);
 
             return withUseCaseResponse(updatedExample, "Example updated successfully.");
         }

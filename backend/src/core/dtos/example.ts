@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import { ListFilter, ListOrder } from "../../types/ListQuery";
 
 export interface ICreateExampleDto extends Pick<Prisma.ExampleUncheckedCreateInput, 'name'> {
   description?: string;
@@ -13,10 +14,12 @@ export interface IUpdateExampleDto {
 
 export interface IIncludeExampleDto { }
 
-export interface IFilterExampleDto extends Prisma.ExampleWhereInput { }
-
 export const EXAMPLE_FILTER_FIELDS = ['name', 'description', 'createdAt', 'updatedAt'] as const;
 
 export const EXAMPLE_ORDER_FIELDS = ['name', 'createdAt', 'updatedAt'] as const;
 
-export interface IOrderExampleDto extends Prisma.ExampleOrderByWithRelationInput { }
+export type ExampleFilterField = typeof EXAMPLE_FILTER_FIELDS[number];
+
+export type IFilterExampleDto = ListFilter<ExampleFilterField>;
+
+export type IOrderExampleDto = ListOrder<ExampleFilterField>;

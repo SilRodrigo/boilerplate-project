@@ -1,3 +1,5 @@
+import { FILTER_OPERATORS, ListFilter, ListOrder } from "../types/ListQuery";
+
 export interface IPaginationQueryParams {
     page?: string | number;
     pageSize?: string | number;
@@ -5,11 +7,11 @@ export interface IPaginationQueryParams {
     order?: string;
 }
 
-export interface IParsedListParams<T = any> {
+export interface IParsedListParams<F extends string = string> {
     currentPage: number;
     pageSize: number;
-    filter: T;
-    order?: any;
+    filter: ListFilter<F>;
+    order: ListOrder<F>;
 }
 
 export interface IListParamsOptions {
@@ -25,12 +27,7 @@ const DEFAULT_PAGE_SIZE = 10;
 const MAX_PAGE_SIZE = 100;
 const MAX_IN_LENGTH = 100;
 
-// Prisma scalar filter operators the client is allowed to use
-const ALLOWED_OPERATORS = new Set([
-    'equals', 'not', 'in', 'notIn',
-    'lt', 'lte', 'gt', 'gte',
-    'contains', 'startsWith', 'endsWith', 'mode',
-]);
+const ALLOWED_OPERATORS = new Set<string>(FILTER_OPERATORS);
 
 const isPrimitive = (value: unknown) =>
     value === null || ['string', 'number', 'boolean'].includes(typeof value);
@@ -101,7 +98,7 @@ const sanitizeOrder = (order: unknown, allowedFields: readonly string[]) => {
     return sanitized;
 };
 
-export const parseListParams = <T = any>(
+export const parseListParams = <F extends string = string>(
     queryParams: IPaginationQueryParams,
     {
         filterFields = [],
@@ -109,13 +106,13 @@ export const parseListParams = <T = any>(
         defaultPageSize = DEFAULT_PAGE_SIZE,
         maxPageSize = MAX_PAGE_SIZE,
     }: IListParamsOptions = {}
-): IParsedListParams<T> => {
+): IParsedListParams<F> => {
     const { page = 1, pageSize = defaultPageSize, filter = '{}', order = '{}' } = queryParams;
 
     return {
         currentPage: toPositiveInt(page, 1),
         pageSize: Math.min(toPositiveInt(pageSize, defaultPageSize), maxPageSize),
-        filter: sanitizeFilter(parseJson(filter, 'filter'), filterFields) as T,
-        order: sanitizeOrder(parseJson(order, 'order'), orderFields),
+        filter: sanitizeFilter(parseJson(filter, 'filter'), filterFields) as ListFilter<F>,
+        order: sanitizeOrder(parseJson(order, 'order'), orderFields) as ListOrder<F>,
     };
 };

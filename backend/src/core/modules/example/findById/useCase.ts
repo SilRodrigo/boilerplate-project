@@ -1,19 +1,19 @@
 import { IExample } from "../../../entities/example";
 import { IUseCase, withUseCaseResponse } from "../../../../types/UseCase";
-import { PrismaExampleRepository } from "../../../repositories";
+import { IExampleRepository } from "../../../repositories";
 
 interface IFactoryParams {
-    prismaExampleRepository: PrismaExampleRepository;
+    exampleRepository: IExampleRepository;
 }
 
 export interface IExampleFindByIdUseCase extends IUseCase<string, IExample> { }
 
 export default function exampleFindByIdUseCaseFactory({
-    prismaExampleRepository
+    exampleRepository
 }: IFactoryParams): IExampleFindByIdUseCase {
     return {
         execute: async (id) => {
-            const example = await prismaExampleRepository.findById(id);
+            const example = await exampleRepository.findById(id);
 
             if (!example) {
                 throw new Error("Example not found.");

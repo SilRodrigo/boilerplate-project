@@ -1,8 +1,8 @@
-import { Prisma } from "@prisma/client";
 import { IExample, exampleFactory } from "../../../entities/example";
 import { ICreateExampleDto, IRequestExampleDto, IUpdateExampleDto } from "../../../dtos";
 import { PrismaBaseRepository } from "./abstract/BaseRepository";
-import { IIncludeExampleDto } from "../../../dtos/example";
+import { ExampleFilterField, IIncludeExampleDto } from "../../../dtos/example";
+import { IExampleRepository } from "../../contracts/IExampleRepository";
 
 const INDEX_KEY = 'example' as const;
 
@@ -12,7 +12,8 @@ export default class PrismaExampleRepository extends PrismaBaseRepository<
     IExample,
     ICreateExampleDto,
     IRequestExampleDto,
-    IUpdateExampleDto> {
+    IUpdateExampleDto,
+    ExampleFilterField> implements IExampleRepository {
 
     constructor() {
         const include = {}

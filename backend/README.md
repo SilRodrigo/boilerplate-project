@@ -90,7 +90,8 @@ New features never need to touch a central file, so a project derived from the b
 | What | Where | How it is picked up |
 | --- | --- | --- |
 | Prisma models | a new `prisma/schema/<domain>.prisma` | Prisma merges every file in `prisma/schema/`. `schema.prisma` only holds the generator and datasource; `user.prisma` is the base model. |
-| Repository | `src/core/repositories/implementations/prisma/FooRepository.ts` | Registered in the container as `prismaFooRepository`. Import its type straight from the file. |
+| Repository contract | `src/core/repositories/contracts/IFooRepository.ts`, extending `IBaseRepository` | Use cases depend on this interface only. Filters and ordering use the neutral `ListFilter` / `ListOrder` from `src/types/ListQuery.ts`. |
+| Repository implementation | `src/core/repositories/implementations/prisma/FooRepository.ts`, implementing the contract | Registered in the container as `fooRepository`. Prisma types stay inside `implementations/prisma`; `architecture.spec.ts` fails if a module or middleware imports Prisma. |
 | Use cases and controllers | `src/core/modules/foo/<action>/useCase.ts` and `controller.ts` | Registered as `fooCreateUseCase`, `fooCreateController`... |
 | Routes | `src/core/routes/foo.routes.ts`, default-exporting a `Router` | Mounted at `/api/v1/foo`. Export `basePath` to mount it elsewhere. |
 
